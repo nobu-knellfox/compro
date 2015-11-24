@@ -1,0 +1,1 @@
+#include "yukicoder6.h"
