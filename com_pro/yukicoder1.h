@@ -1,7 +1,3 @@
-#pragma once
-#pragma once
-#pragma once
-
 #define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <vector>
@@ -56,56 +52,74 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-int n;
-bool dp[111][11001];
+using P = pair<int, pair<int, int>>;
+
+struct Node {
+	int to, cost, time;
+};
 
 signed main()
 {
 	QUICK_CIN;
-	fstream cin("debug.txt");
-	ofstream cout("result.txt");
+	//fstream cin("debug.txt");
+	//ofstream cout("result.txt");
+	
+	int n, c, v;
 
-	while (cin >> n) {
-		REP(i, 101) {
-			REP(j, 10001)
-				dp[i][j] = false;
+	cin >> n >> c >> v;
+
+	vector<int> s, t, y, m;
+	vector<Node> to[51];
+
+	REP(i, v) {
+		int c;
+		cin >> c;
+		s.push_back(c);
+	}
+
+	REP(i, v) {
+		int c;
+		cin >> c;
+		t.push_back(c);
+	}
+
+	REP(i, v) {
+		int c;
+		cin >> c;
+		y.push_back(c);
+	}
+
+	REP(i, v) {
+		int c;
+		cin >> c;
+		m.push_back(c);
+	}
+
+	REP(i, v) {
+		to[s[i]].push_back({ t[i],y[i],m[i] });
+	}
+
+
+	priority_queue<P,vector<P>,greater<P>> que;
+
+	P p(0,pair<int,int>(1,0));
+	que.push(p);
+
+	while (!que.empty()) {
+		auto now = que.top();
+		que.pop();
+
+		if (now.second.first == n) {
+			cout << now.first << endl;
+			return 0;
 		}
 
-		dp[0][0] = true;
-
-		vector<int> v(n);
-
-		REP(i, n) {
-			int c;
-			cin >> c;
-			v[i] = c;
-		}
-
-		sort(ALL(v));
-
-
-
-		REP(i, n) {
-			REP(j, n * 101) {
-				dp[i + 1][j] = dp[i][j] || dp[i + 1][j];
-				dp[i + 1][j + v[i]] = dp[i][j] || dp[i + 1][j + v[i]];
-
+		for (auto x : to[now.second.first]) {
+			if (now.second.second + x.cost <= c) {
+				que.push(P(now.first + x.time, pair<int,int>(x.to,now.second.second + x.cost)));
 			}
 		}
-
-		int sum = accumulate(ALL(v), 0);
-
-
-
-		if (sum % 2) {
-			cout << "impossible" << endl;
-			continue;
-		}
-		if (dp[n][sum / 2]) {
-			cout << "possible" << endl;
-		}
-		else {
-			cout << "impossible" << endl;
-		}
 	}
+	cout << -1 << endl;
+
 }
