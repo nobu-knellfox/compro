@@ -56,56 +56,84 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-int n;
-bool dp[111][11001];
+bool prime[200001];
+bool syaku[10];
 
 signed main()
 {
 	QUICK_CIN;
-	fstream cin("debug.txt");
-	ofstream cout("result.txt");
+	//fstream cin("debug.txt");
+	//ofstream cout("result.txt");
+	
+	int n, k;
+	cin >> n >> k;
 
-	while (cin >> n) {
-		REP(i, 101) {
-			REP(j, 10001)
-				dp[i][j] = false;
-		}
+	prime[0] = prime[1] = true;
 
-		dp[0][0] = true;
-
-		vector<int> v(n);
-
-		REP(i, n) {
-			int c;
-			cin >> c;
-			v[i] = c;
-		}
-
-		sort(ALL(v));
-
-
-
-		REP(i, n) {
-			REP(j, n * 101) {
-				dp[i + 1][j] = dp[i][j] || dp[i + 1][j];
-				dp[i + 1][j + v[i]] = dp[i][j] || dp[i + 1][j + v[i]];
-
-			}
-		}
-
-		int sum = accumulate(ALL(v), 0);
-
-
-
-		if (sum % 2) {
-			cout << "impossible" << endl;
-			continue;
-		}
-		if (dp[n][sum / 2]) {
-			cout << "possible" << endl;
-		}
-		else {
-			cout << "impossible" << endl;
+	for (int i = 2; i*i < 200001; ++i) {
+		int j = i * 2;
+		for (; j < 200001; j += i) {
+			prime[j] = true;
 		}
 	}
+
+	vector<int> pri;
+
+	REP(i, 200001) {
+		if (!prime[i]) {
+			pri.push_back(i);
+		}
+	}
+
+
+	auto f = [](int n) -> int{
+		while (n / 10) {
+			int temp = n;
+			n = 0;
+			while (temp) {
+				n += temp % 10;
+				temp /= 10;
+			}
+		}
+		return n;
+	};
+
+	auto left = lower_bound(ALL(pri), n);
+	auto right = upper_bound(ALL(pri), k);
+
+	right = right - 1;
+
+	cout << *left << endl;
+	cout << *right << endl;
+
+	int max_a = -1;
+	int max_l = -1;
+	int len = 0;
+
+	for (auto i = left, j = left; i <= right;) {
+		auto ik = f(*i);
+		auto jk = f(*j);
+
+		while (!syaku[ik] && i <= right) {
+			syaku[ik] = true;
+			++i;
+			ik = f(*i);
+
+			++len;
+			if (max_l <= len) {
+				max_a = *i;
+				max_l = len;
+			}
+		}
+		while (syaku[ik] && i <= right){
+			syaku[jk] = false;
+			++j;
+			jk = f(*j);
+
+			--len;
+		}
+	}
+
+	cout << max_a << endl;
+
 }
