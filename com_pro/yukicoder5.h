@@ -62,50 +62,32 @@ bool dp[111][11001];
 signed main()
 {
 	QUICK_CIN;
-	fstream cin("debug.txt");
-	ofstream cout("result.txt");
+	//fstream cin("debug.txt");
+	//ofstream cout("result.txt");
 
-	while (cin >> n) {
-		REP(i, 101) {
-			REP(j, 10001)
-				dp[i][j] = false;
-		}
+	int L,n;
 
-		dp[0][0] = true;
+	cin >> L >> n;
 
-		vector<int> v(n);
-
-		REP(i, n) {
-			int c;
-			cin >> c;
-			v[i] = c;
-		}
-
-		sort(ALL(v));
-
-
-
-		REP(i, n) {
-			REP(j, n * 101) {
-				dp[i + 1][j] = dp[i][j] || dp[i + 1][j];
-				dp[i + 1][j + v[i]] = dp[i][j] || dp[i + 1][j + v[i]];
-
-			}
-		}
-
-		int sum = accumulate(ALL(v), 0);
-
-
-
-		if (sum % 2) {
-			cout << "impossible" << endl;
-			continue;
-		}
-		if (dp[n][sum / 2]) {
-			cout << "possible" << endl;
-		}
-		else {
-			cout << "impossible" << endl;
-		}
+	vector<int> w;
+	REP(i, n) {
+		int c;
+		cin >> c;
+		w.push_back(c);
 	}
+	sort(ALL(w));
+
+	int num = 0;
+	int sum = 0;
+	
+	for_each(ALL(w),
+		[&](int w) {
+		if (sum + w <= L) {
+			sum += w;
+			num++;
+		}
+	});
+
+	cout << num << endl;
+
 }

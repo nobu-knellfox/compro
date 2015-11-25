@@ -54,55 +54,42 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 
 int n;
-bool dp[111][11001];
+vector<int> w;
+bool dp[101][10101];
 
 signed main()
 {
 	QUICK_CIN;
-	fstream cin("debug.txt");
-	ofstream cout("result.txt");
+	//fstream cin("debug.txt");
+	//ofstream cout("result.txt");
+	
+	cin >> n;
+	REP(i, n) {
+		int c;
+		cin >> c;
+		w.push_back(c);
+	}
 
-	while (cin >> n) {
-		REP(i, 101) {
-			REP(j, 10001)
-				dp[i][j] = false;
-		}
+	dp[0][0] = true;
 
-		dp[0][0] = true;
+	int sum = std::accumulate(ALL(w), 0);
 
-		vector<int> v(n);
-
-		REP(i, n) {
-			int c;
-			cin >> c;
-			v[i] = c;
-		}
-
-		sort(ALL(v));
-
-
-
-		REP(i, n) {
-			REP(j, n * 101) {
-				dp[i + 1][j] = dp[i][j] || dp[i + 1][j];
-				dp[i + 1][j + v[i]] = dp[i][j] || dp[i + 1][j + v[i]];
-
-			}
-		}
-
-		int sum = accumulate(ALL(v), 0);
-
-
-
-		if (sum % 2) {
-			cout << "impossible" << endl;
-			continue;
-		}
-		if (dp[n][sum / 2]) {
-			cout << "possible" << endl;
-		}
-		else {
-			cout << "impossible" << endl;
+	REP(i, n) {
+		REP(j, 10001) {
+			dp[i+1][j + w[i]] = dp[i][j] | dp[i][j+w[i]];
 		}
 	}
+
+	if (sum % 2) {
+		cout << "impossible" << endl;
+		return 0;
+	}
+
+	if (dp[n][sum / 2]) {
+		cout << "possible" << endl;
+	}
+	else {
+		cout << "impossible" << endl;
+	}
+
 }
