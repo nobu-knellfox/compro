@@ -38,8 +38,8 @@
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();++it)
 #define LL long long
 #define int LL
-#define INF  99999999
-#define DIV 1000000007
+#define inf  99999999
+#define div 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define InitArr1(c,n) memset(&c[0],0,sizeof(int)*n)
 #define InitArr2(c,n) memset(&c[0][0],0,sizeof(int)*n)
@@ -56,81 +56,75 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-bool prime[200001];
-bool syaku[10];
+using P = pair<int, int>;
 
 signed main()
 {
 	QUICK_CIN;
 	//fstream cin("debug.txt");
 	//ofstream cout("result.txt");
-	
-	int n, k;
-	cin >> n >> k;
 
-	prime[0] = prime[1] = true;
+	int n;
+	cin >> n;
+	vector<int> a, b;
 
-	for (int i = 2; i*i < 200001; ++i) {
-		int j = i * 2;
-		for (; j < 200001; j += i) {
-			prime[j] = true;
-		}
+	REP(i, n) {
+		int c;
+		cin >> c;
+		a.push_back(c);
 	}
 
-	vector<int> pri;
-
-	REP(i, 200001) {
-		if (!prime[i]) {
-			pri.push_back(i);
-		}
+	REP(i, n) {
+		int c;
+		cin >> c;
+		b.push_back(c / 2);
 	}
 
-
-	auto f = [](int n) -> int{
-		while (n / 10) {
-			int temp = n;
-			n = 0;
-			while (temp) {
-				n += temp % 10;
-				temp /= 10;
-			}
+	auto comp = [](P a, P b)
+	{
+		if (a.first > b.first) {
+			return true;
 		}
-		return n;
+		else if (a.first == b.first) {
+			return a.second >= b.second;
+		}
+		return false;
 	};
 
-	auto left = lower_bound(ALL(pri), n);
-	auto right = upper_bound(ALL(pri), k);
+	int min_n = inf;
 
-	right = right - 1;
+	//first = ÉåÉxÉã , second = êÌì¨âÒêî
+	priority_queue<P, vector<P>, decltype(comp)> que(comp);
 
-	int max_a = -1;
-	int max_l = -1;
-	int len = 0;
 
-	for (auto i = left, j = left; i <= right;) {
-		auto ik = f(*i);
-		auto jk = f(*j);
-
-		while (!syaku[ik] && i <= right) {
-			syaku[ik] = true;
-			++i;
-			ik = f(*i);
-
-			++len;
-			if (max_l <= len) {
-				max_a = *j;
-				max_l = len;
-			}
+	for (int it = 0; it < n; ++it) {
+		for (int i = 0; i < a.size(); ++i) {
+			que.emplace(a[i], 0);
 		}
-		while (syaku[ik] && i <= right){
-			syaku[jk] = false;
-			++j;
-			jk = f(*j);
 
-			--len;
+		for (int ii = it,i = 0; i < b.size(); ++i,++ii) {
+			ii %= b.size();
+
+			auto now = que.top();
+			que.pop();
+
+			now.first += b[ii];
+			now.second++;
+
+			que.push(now);
 		}
+
+		int max_n = -1;
+		while (!que.empty()) {
+			auto x = que.top();
+			que.pop();
+
+			max_n = max(max_n, x.second);
+		}
+
+		min_n = min(min_n, max_n);
+
 	}
 
-	cout << max_a << endl;
-
+	cout << min_n << endl;
 }

@@ -38,8 +38,8 @@
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();++it)
 #define LL long long
 #define int LL
-#define INF  99999999
-#define DIV 1000000007
+#define inf  99999999
+#define div 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define InitArr1(c,n) memset(&c[0],0,sizeof(int)*n)
 #define InitArr2(c,n) memset(&c[0][0],0,sizeof(int)*n)
@@ -56,81 +56,30 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-bool prime[200001];
-bool syaku[10];
+const int N = 10001;
+
+bool prime[N + 100];
+
+bool dp[N];
 
 signed main()
 {
 	QUICK_CIN;
 	//fstream cin("debug.txt");
 	//ofstream cout("result.txt");
-	
-	int n, k;
-	cin >> n >> k;
 
-	prime[0] = prime[1] = true;
+	int p;
+	cin >> p;
 
-	for (int i = 2; i*i < 200001; ++i) {
-		int j = i * 2;
-		for (; j < 200001; j += i) {
-			prime[j] = true;
+	REP(i, p) {
+		int n, k;
+		cin >> n >> k;
+
+		if ((n-1) % (k + 1) == 0) {
+			cout << "Lose" << endl;
+		}
+		else {
+			cout << "Win" << endl;
 		}
 	}
-
-	vector<int> pri;
-
-	REP(i, 200001) {
-		if (!prime[i]) {
-			pri.push_back(i);
-		}
-	}
-
-
-	auto f = [](int n) -> int{
-		while (n / 10) {
-			int temp = n;
-			n = 0;
-			while (temp) {
-				n += temp % 10;
-				temp /= 10;
-			}
-		}
-		return n;
-	};
-
-	auto left = lower_bound(ALL(pri), n);
-	auto right = upper_bound(ALL(pri), k);
-
-	right = right - 1;
-
-	int max_a = -1;
-	int max_l = -1;
-	int len = 0;
-
-	for (auto i = left, j = left; i <= right;) {
-		auto ik = f(*i);
-		auto jk = f(*j);
-
-		while (!syaku[ik] && i <= right) {
-			syaku[ik] = true;
-			++i;
-			ik = f(*i);
-
-			++len;
-			if (max_l <= len) {
-				max_a = *j;
-				max_l = len;
-			}
-		}
-		while (syaku[ik] && i <= right){
-			syaku[jk] = false;
-			++j;
-			jk = f(*j);
-
-			--len;
-		}
-	}
-
-	cout << max_a << endl;
-
 }
