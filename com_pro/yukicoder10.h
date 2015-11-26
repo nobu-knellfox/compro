@@ -38,7 +38,7 @@
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();++it)
 #define LL long long
 #define int LL
-#define inf  99999999
+#define inf  ((int)1 << 54)
 #define DIV 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define InitArr1(c,n) memset(&c[0],0,sizeof(int)*n)
@@ -90,10 +90,10 @@ signed main()
 		REP(j, Total) {
 			if (dp[i][j] != inf) {
 				if (j + a[i+1] < Total)
-					dp[i + 1][j + a[i+1]] = min(dp[i + 1][j + a[i+1]], dp[i][j] + (0 << i));
+					dp[i + 1][j + a[i+1]] = min(dp[i + 1][j + a[i+1]], dp[i][j] + ((int)0 << (n - i - 2)));
 
 				if (j * a[i+1] < Total)
-					dp[i + 1][j * a[i+1]] = min(dp[i + 1][j * a[i+1]], dp[i][j] + (1 << i));
+					dp[i + 1][j * a[i+1]] = min(dp[i + 1][j * a[i+1]], dp[i][j] + ((int)1 << (n - i - 2)));
 			}
 		}
 	}
@@ -101,14 +101,15 @@ signed main()
 	auto ans = dp[n - 1][t];
 
 	int count = 0;
+	string an = "";
 
 	while (ans) {
 		count++;
 		if (ans % 2) {
-			cout << "*";
+			an += "*";
 		}
 		else {
-			cout << "+";
+			an +=  "+";
 		}
 		ans >>= 1;
 	}	
@@ -116,8 +117,9 @@ signed main()
 	auto dif = n - count - 1;
 	
 	while (dif-- > 0) {
-		cout << "+";
+		an +=  "+";
 	}
+	std::reverse(ALL(an));
 
-	cout <<  endl;
+	cout << an << endl;
 }
