@@ -1,7 +1,3 @@
-#pragma once
-#pragma once
-#pragma once
-
 #define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <vector>
@@ -56,70 +52,11 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-const int Total = 100001;
-
-int dp[51][Total];
-
 signed main()
 {
 	QUICK_CIN;
 	//fstream cin("debug.txt");
 	//ofstream cout("result.txt");
-	
-	int n, t;
-	cin >> n;
-	cin >> t;
-
-	vector<int> a;
-	REP(i, n) {
-		int c;
-		cin >> c;
-		a.push_back(c);
-	}
 
 
-	REP(i, 51) {
-		REP(j, Total) {
-			dp[i][j] = inf;
-		}
-	}
-
-	dp[0][a[0]] = 0;
-
-	REP(i, n-1) {
-		REP(j, Total) {
-			if (dp[i][j] != inf) {
-				if (j + a[i+1] < Total)
-					dp[i + 1][j + a[i+1]] = min(dp[i + 1][j + a[i+1]], dp[i][j] + ((int)0 << (n - i - 2)));
-
-				if (j * a[i+1] < Total)
-					dp[i + 1][j * a[i+1]] = min(dp[i + 1][j * a[i+1]], dp[i][j] + ((int)1 << (n - i - 2)));
-			}
-		}
-	}
-
-	auto ans = dp[n - 1][t];
-
-	int count = 0;
-	string an = "";
-
-	while (ans) {
-		count++;
-		if (ans % 2) {
-			an += "*";
-		}
-		else {
-			an +=  "+";
-		}
-		ans >>= 1;
-	}	
-
-	auto dif = n - count - 1;
-	
-	while (dif-- > 0) {
-		an +=  "+";
-	}
-	std::reverse(ALL(an));
-
-	cout << an << endl;
 }
