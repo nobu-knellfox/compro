@@ -1,3 +1,4 @@
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <vector>
@@ -39,8 +40,6 @@
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define InitArr1(c,n) memset(&c[0],0,sizeof(int)*n)
 #define InitArr2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define vscan(a) int _c_; cin >> _c_; (a).push_back(_c_);
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
 
 template<class T>
 bool valid(T x, T w) { return 0 <= x&&x < w; }
@@ -54,78 +53,48 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-
-vector<char> ch;
-
-void f()
-{
-	string s, t;
-	cin >> s >> t;
-	REP(k, 26) {
-		REP(i, (int)s.size() - (int)t.size() + 1) {
-			bool ok = true;
-			REP(j, t.size()) {
-				if (s[i + j] != t[j]) {
-					ok = false;
-				}
-			}
-			if (ok) {
-				cout << "YES" << endl;
-				return;
-			}
-		}
-
-		string ts = "";
-		for_each(ALL(s), [&](char x) {
-			if (x != ch[k]) {
-				ts += x;
-			}
-		});
-
-		int y(0);
-		REP(w,ts.size()){
-			if (ts[w] == t[y])++y;
-
-			if (y == t.size()) {
-				s = ts;
-				break;
-			}
-		}
-	}
-
-
-	REP(i, (int)s.size() - (int)t.size() + 1) {
-		bool ok = true;
-		REP(j, t.size()) {
-			if (s[i + j] != t[j]) {
-				ok = false;
-			}
-		}
-		if (ok) {
-			cout << "YES" << endl;
-			return;
-		}
-	}
-
-	cout << "NO" << endl;
-	return;
-}
+string s;
+int dp[100001];
 
 signed main()
 {
 	QUICK_CIN;
-	//debug_input;
+	//fstream cin("input.txt");
+	//ofstream cout("result.txt");
 
-	REP(i, 26) {
-		ch.push_back((char)('a' + i));
+	int n;
+	cin >> n;
+	cin >> s;
+	bool in = false;
+	bool out = false;
+
+	REP(i, s.size() - 1) {
+		if (s[i] == s[i + 1]) {
+			if (!in) {
+				in = true;
+				s[i + 1] = (s[i] == '0' ? '1' : '0');
+			}
+
+			if (in && !out) {
+				s[i + 1] = (s[i] == '0' ? '1' : '0');
+			}
+		}
+		else if (in && !out) {
+			out = true;
+		}
 	}
 
-	int q;
-	cin >> q;
+	dp[0] = 1;
 
-	REP(i, q) {
-		f();
+	REP(i, s.size() - 1) {
+		if (s[i] != s[i + 1]) {
+			dp[i + 1] = dp[i] + 1;
+		}
+		else {
+			dp[i + 1] = dp[i];
+		}
 	}
 
-	return 0;
+	cout << dp[n-1] << endl;
+
 }
