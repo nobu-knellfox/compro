@@ -39,6 +39,8 @@
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define InitArr1(c,n) memset(&c[0],0,sizeof(int)*n)
 #define InitArr2(c,n) memset(&c[0][0],0,sizeof(int)*n)
+#define vscan(a) int _c_; cin >> _c_; (a).push_back(_c_);
+#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
 
 template<class T>
 bool valid(T x, T w) { return 0 <= x&&x < w; }
@@ -52,95 +54,59 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-bool prime[5000001];
-vector<int> pris;
-
+bool mat[50][50];
+int n;
+vector<int> s;
+int m;
 
 signed main()
 {
 	QUICK_CIN;
-	//fstream cin("debug.txt");
-	//ofstream cout("result.txt");
+	debug_input;
 
-	prime[0] = prime[1] = true;
-
-	for (int i = 2; i*i < 5000001; ++i) {
-		int j = 2 * i;
-		for (; j < 5000001; j += i) {
-			prime[j] = true;
-		}
-	}
-
-	pris.push_back(0);
-
-	REP(i, 5000001) {
-		if (!prime[i]) {
-			pris.push_back(i);
-		}
-	}
-
-	int n;
 	cin >> n;
-	map<int, bool> a;
-	bool dd[10] = { false };
-
 	REP(i, n) {
-		int c;
-		cin >> c;
-		a[c] = true;
-		dd[c] = true;
+		vscan(s);
 	}
 
+	cin >> m;
 
-	int max_l = -1;
-	int point = 0;
+	int sum = accumulate(ALL(s), 0);
 
-	REP(i, pris.size()) {
-		bool ok = true;
+	REP(i, 50) {
+		mat[i][i] = true;
+	}
 
-		auto p = pris[i];
-		bool d[10] = { false };
+	REP(i, m) {
+		int a, b, c;
 
-		while (p) {
-			d[p % 10] = true;
-			p /= 10;
-		}
+		cin >> a >> b >> c;
+		b--;
+		c--;
 
-		REP(i, 10) {
-			if (d[i] && !a.count(i)) {
-				ok = false;
-			}
-		}
-
-		if (ok) {
-			REP(i, 10) {
-				if(d[i])
-					dd[i] = false;
-			}
-
-			if (i == pris.size() - 1) {
-				auto lp = pris[point];
-				max_l = max(max_l, 5000000 - lp - 1);
-			}
+		if (a == 0) {
+			mat[b][c] = true;
 		}
 		else {
-			bool ook = false;
-			REP(i, 10) {
-				ook |= dd[i];
+			int tsum = sum;
+
+			if (mat[b][c]) {
+				cout << s[c] << " " << s[c] << endl;
+				continue;
 			}
 
-			if (!ook) {
-				auto rp = pris[i];
-				auto lp = pris[point];
-				max_l = max(max_l, rp - lp - 2);
-			}
-			
-			for (auto x : a) {
-				dd[x.first] = true;
+			int num = 0;
+
+			REP(i, n) {
+				if (mat[b][i]) {
+					tsum -= s[i];
+					num++;
+				}
 			}
 
-			point = i;
+			cout << max((int)0, tsum - (n - num - 1)*(int)100) << " " << min((int)100, tsum) << endl;
 		}
 	}
-	cout << max_l << endl;
+
+	return 0;
 }
