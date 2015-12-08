@@ -52,95 +52,77 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-bool prime[5000001];
-vector<int> pris;
-
-
 signed main()
 {
 	QUICK_CIN;
 	//fstream cin("debug.txt");
 	//ofstream cout("result.txt");
 
-	prime[0] = prime[1] = true;
+	vector<int>a, b;
+	int c;
 
-	for (int i = 2; i*i < 5000001; ++i) {
-		int j = 2 * i;
-		for (; j < 5000001; j += i) {
-			prime[j] = true;
-		}
-	}
-
-	pris.push_back(0);
-
-	REP(i, 5000001) {
-		if (!prime[i]) {
-			pris.push_back(i);
-		}
-	}
-
-	int n;
-	cin >> n;
-	map<int, bool> a;
-	bool dd[10] = { false };
-
-	REP(i, n) {
+	REP(i, 2) {
 		int c;
 		cin >> c;
-		a[c] = true;
-		dd[c] = true;
+		a.push_back(c);
+	}
+	REP(i, 2) {
+		int c;
+		cin >> c;
+		b.push_back(c);
+	}
+
+	cin >> c;
+	bool fa(false), fb(false);
+
+	REP(i, 2) {
+		if (a[i] == c)fa = true;
+		if (b[i] == c)fb = true;
+	}
+
+	auto func = [](vector<int> an)
+	{
+		sort(ALL(an));
+
+		cout << an.size() << endl;
+
+		for (auto x : an) {
+			cout << x << endl;
+		}
+	};
+
+	vector<int> ans;
+
+	if (fa && !fb) {
+		ans.push_back(b[0]);
+		if (b[0] != b[1]) {
+			ans.push_back(b[1]);
+		}
+
+		func(ans);
+
+		return 0;
+	}
+	if (!fa && fb) {
+		ans.push_back(a[0]);
+		if (a[0] != a[1]) {
+			ans.push_back(a[1]);
+		}
+
+		func(ans);
+
+		return 0;
+	}
+
+	if (fa && fb) {
+		vector<int> ans = { a[0] , a[1] , b[0] , b[1]};
+		sort(ALL(ans));
+		ans.erase(unique(ALL(ans)), ans.end());
+		func(ans);
+		return 0;
 	}
 
 
-	int max_l = -1;
-	int point = 0;
 
-	REP(i, pris.size()) {
-		bool ok = true;
-
-		auto p = pris[i];
-		bool d[10] = { false };
-
-		while (p) {
-			d[p % 10] = true;
-			p /= 10;
-		}
-
-		REP(i, 10) {
-			if (d[i] && !a.count(i)) {
-				ok = false;
-			}
-		}
-
-		if (ok) {
-			REP(i, 10) {
-				if(d[i])
-					dd[i] = false;
-			}
-
-			if (i == pris.size() - 1) {
-				auto lp = pris[point];
-				max_l = max(max_l, 5000000 - lp - 1);
-			}
-		}
-		else {
-			bool ook = false;
-			REP(i, 10) {
-				ook |= dd[i];
-			}
-
-			if (!ook) {
-				auto rp = pris[i];
-				auto lp = pris[point];
-				max_l = max(max_l, rp - lp - 2);
-			}
-			
-			for (auto x : a) {
-				dd[x.first] = true;
-			}
-
-			point = i;
-		}
-	}
-	cout << max_l << endl;
+	return 0;
 }

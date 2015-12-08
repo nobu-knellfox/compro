@@ -39,6 +39,8 @@
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define InitArr1(c,n) memset(&c[0],0,sizeof(int)*n)
 #define InitArr2(c,n) memset(&c[0][0],0,sizeof(int)*n)
+#define vscan(a) int _c_; cin >> _c_; (a).push_back(_c_);
+#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
 
 template<class T>
 bool valid(T x, T w) { return 0 <= x&&x < w; }
@@ -52,95 +54,78 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-bool prime[5000001];
-vector<int> pris;
 
+vector<char> ch;
+
+void f()
+{
+	string s, t;
+	cin >> s >> t;
+	REP(k, 26) {
+		REP(i, (int)s.size() - (int)t.size() + 1) {
+			bool ok = true;
+			REP(j, t.size()) {
+				if (s[i + j] != t[j]) {
+					ok = false;
+				}
+			}
+			if (ok) {
+				cout << "YES" << endl;
+				return;
+			}
+		}
+
+		string ts = "";
+		for_each(ALL(s), [&](char x) {
+			if (x != ch[k]) {
+				ts += x;
+			}
+		});
+
+		int y(0);
+		REP(w,ts.size()){
+			if (ts[w] == t[y])++y;
+
+			if (y == t.size()) {
+				s = ts;
+				break;
+			}
+		}
+	}
+
+
+	REP(i, (int)s.size() - (int)t.size() + 1) {
+		bool ok = true;
+		REP(j, t.size()) {
+			if (s[i + j] != t[j]) {
+				ok = false;
+			}
+		}
+		if (ok) {
+			cout << "YES" << endl;
+			return;
+		}
+	}
+
+	cout << "NO" << endl;
+	return;
+}
 
 signed main()
 {
 	QUICK_CIN;
-	//fstream cin("debug.txt");
-	//ofstream cout("result.txt");
+	//debug_input;
 
-	prime[0] = prime[1] = true;
-
-	for (int i = 2; i*i < 5000001; ++i) {
-		int j = 2 * i;
-		for (; j < 5000001; j += i) {
-			prime[j] = true;
-		}
+	REP(i, 26) {
+		ch.push_back((char)('a' + i));
 	}
 
-	pris.push_back(0);
+	int q;
+	cin >> q;
 
-	REP(i, 5000001) {
-		if (!prime[i]) {
-			pris.push_back(i);
-		}
+	REP(i, q) {
+		f();
 	}
 
-	int n;
-	cin >> n;
-	map<int, bool> a;
-	bool dd[10] = { false };
-
-	REP(i, n) {
-		int c;
-		cin >> c;
-		a[c] = true;
-		dd[c] = true;
-	}
-
-
-	int max_l = -1;
-	int point = 0;
-
-	REP(i, pris.size()) {
-		bool ok = true;
-
-		auto p = pris[i];
-		bool d[10] = { false };
-
-		while (p) {
-			d[p % 10] = true;
-			p /= 10;
-		}
-
-		REP(i, 10) {
-			if (d[i] && !a.count(i)) {
-				ok = false;
-			}
-		}
-
-		if (ok) {
-			REP(i, 10) {
-				if(d[i])
-					dd[i] = false;
-			}
-
-			if (i == pris.size() - 1) {
-				auto lp = pris[point];
-				max_l = max(max_l, 5000000 - lp - 1);
-			}
-		}
-		else {
-			bool ook = false;
-			REP(i, 10) {
-				ook |= dd[i];
-			}
-
-			if (!ook) {
-				auto rp = pris[i];
-				auto lp = pris[point];
-				max_l = max(max_l, rp - lp - 2);
-			}
-			
-			for (auto x : a) {
-				dd[x.first] = true;
-			}
-
-			point = i;
-		}
-	}
-	cout << max_l << endl;
+	return 0;
 }

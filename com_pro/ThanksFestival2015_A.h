@@ -52,9 +52,7 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-bool prime[5000001];
-vector<int> pris;
-
+int a, b;
 
 signed main()
 {
@@ -62,85 +60,12 @@ signed main()
 	//fstream cin("debug.txt");
 	//ofstream cout("result.txt");
 
-	prime[0] = prime[1] = true;
+	cin >> a >> b;
 
-	for (int i = 2; i*i < 5000001; ++i) {
-		int j = 2 * i;
-		for (; j < 5000001; j += i) {
-			prime[j] = true;
-		}
+	if (a*b < 0) {
+		cout << abs(2 * a) + abs(2 * b) << endl;
 	}
-
-	pris.push_back(0);
-
-	REP(i, 5000001) {
-		if (!prime[i]) {
-			pris.push_back(i);
-		}
+	else {
+		cout << 2*max(max(a,b),-min(a,b)) << endl;
 	}
-
-	int n;
-	cin >> n;
-	map<int, bool> a;
-	bool dd[10] = { false };
-
-	REP(i, n) {
-		int c;
-		cin >> c;
-		a[c] = true;
-		dd[c] = true;
-	}
-
-
-	int max_l = -1;
-	int point = 0;
-
-	REP(i, pris.size()) {
-		bool ok = true;
-
-		auto p = pris[i];
-		bool d[10] = { false };
-
-		while (p) {
-			d[p % 10] = true;
-			p /= 10;
-		}
-
-		REP(i, 10) {
-			if (d[i] && !a.count(i)) {
-				ok = false;
-			}
-		}
-
-		if (ok) {
-			REP(i, 10) {
-				if(d[i])
-					dd[i] = false;
-			}
-
-			if (i == pris.size() - 1) {
-				auto lp = pris[point];
-				max_l = max(max_l, 5000000 - lp - 1);
-			}
-		}
-		else {
-			bool ook = false;
-			REP(i, 10) {
-				ook |= dd[i];
-			}
-
-			if (!ook) {
-				auto rp = pris[i];
-				auto lp = pris[point];
-				max_l = max(max_l, rp - lp - 2);
-			}
-			
-			for (auto x : a) {
-				dd[x.first] = true;
-			}
-
-			point = i;
-		}
-	}
-	cout << max_l << endl;
 }

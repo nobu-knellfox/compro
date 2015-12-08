@@ -53,34 +53,8 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-int score[5] = { (int)(500 * 0.3),(int)(1000 * 0.3),(int)(1500 * 0.3),(int)(2000 * 0.3),(int)(2500 * 0.3) };
-int divscore[5] = { 2,4,6,8,10 };
-
-
-bool f(deque<int> bells, int nbox, int size)
-{
-	nbox--;
-
-	while (!bells.empty()) {
-		if (nbox < 0) {
-			return false;
-		}
-
-		auto x = bells.front();
-		bells.pop_front();
-
-		if (bells.size() > 0) {
-			auto y = bells.back();
-
-			if (x + y <= size) {
-				bells.pop_back();
-			}
-			nbox--;
-			continue;
-		}
-	}
-	return true;
-}
+string s;
+int dp[100001];
 
 signed main()
 {
@@ -88,23 +62,39 @@ signed main()
 	//fstream cin("input.txt");
 	//ofstream cout("result.txt");
 
-	int n, k;
-	deque<int> s;
-	cin >> n >> k;
+	int n;
+	cin >> n;
+	cin >> s;
+	bool in = false;
+	bool out = false;
 
-	REP(i, n) {
-		int c;
-		cin >> c;
-		s.push_front(c);
+	REP(i, s.size() - 1) {
+		if (s[i] == s[i + 1]) {
+			if (!in) {
+				in = true;
+				s[i + 1] = (s[i] == '0' ? '1' : '0');
+			}
+
+			if (in && !out) {
+				s[i + 1] = (s[i] == '0' ? '1' : '0');
+			}
+		}
+		else if (in && !out) {
+			out = true;
+		}
 	}
 
-	int left, right, middle;
-	left = s[0] - 1; right = s[0] * 2 + 1;
+	dp[0] = 1;
 
-	while (right - left > 1) {
-		middle = (left + right) / 2;
-		(f(s, k, middle) ? right : left) = middle;
+	REP(i, s.size() - 1) {
+		if (s[i] != s[i + 1]) {
+			dp[i + 1] = dp[i] + 1;
+		}
+		else {
+			dp[i + 1] = dp[i];
+		}
 	}
 
-	cout << right << endl;
+	cout << dp[n-1] << endl;
+
 }
