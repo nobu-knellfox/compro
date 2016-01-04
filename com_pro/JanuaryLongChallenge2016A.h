@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <vector>
-#include <algorithm> 
+#include <algorithm>
 #include <numeric>
 #include <set>
 #include <map>
@@ -54,80 +54,10 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-class InstantRunoffVoting
-{
-	int winner(vector <string> voters)
-	{
-
-	}
-};
-
 
 signed main()
 {
 	QUICK_CIN;
-	debug_input;
-	vector <string> voters;
-	int n;
-	cin >> n;
+	//debug_input;
 
-
-	REP(i, n) {
-		string a;
-		cin >> a;
-		voters.push_back(a);
-	}
-
-	using dei = deque<int>;
-	using vdai = vector<dei>;
-	using pvdai = pair<int, vdai>;
-
-	int len = voters[0].size();
-
-	map<int, vdai> ve;
-
-	for (auto s : voters) {
-		dei d;
-		for (auto c : s) {
-			d.push_back(c - '0');
-		}
-		auto te = d.front();
-		d.pop_front();
-		ve[te].push_back(d);
-	}
-
-
-	REP(i, len - 1) {
-		auto ma = max_element(ALL(ve), [](pvdai a, pvdai b) {return  a.second.size() >= b.second.size(); });
-		auto mi = min_element(ALL(ve), [](pvdai a, pvdai b) {return a.second.size() <= b.second.size(); });
-
-		if (ma->second.size() > n / 2) {
-			ve.erase(remove_if(ALL(ve), [=](vdai a) {a.size() < ma->second.size(); }), ve.end());
-		}
-		else {
-			vector<int> aaa;
-			for (auto it = ve.begin(); it != ve.end();it++) {
-				if (it->second.size() == mi->second.size()) {
-					aaa.push_back(it->first);
-				}
-			}
-			for (auto xx : aaa) {
-				for (auto x : ve[xx]) {
-					while (ve.find(x.front()) == ve.end()) {
-						x.pop_front();
-					}
-					int te = x.front();
-					x.pop_front();
-					ve[te].push_back(x);
-				}
-			}
-			for (auto it = ve.begin(); it != ve.end();) {
-				if (it->second.size() == 0) {
-
-				}
-			}
-		}
-	}
-
-	return 0;
 }
