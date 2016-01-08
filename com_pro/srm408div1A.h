@@ -34,7 +34,7 @@ using namespace std;
 #define LL long long
 #define lint LL
 #define inf  ((int)1 << 54)
-#define DIV 1000000007
+#define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
@@ -51,65 +51,47 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 
-
-class PermutationSignature {
-public:
-	vector <int> reconstruct(string signature)
-	{
-		string s;
-
-		s = signature;
-		int n = s.size() + 1;
-
-		vi a;
-
-		REP(i, n) {
-			a.push_back(i + 1);
-		}
-
-		REP(i, n - 1) {
-			REP(j, n - 1) {
-				if (s[i] == 'D'&&a[i] < a[i+1]) {
-					swap(a[i], a[i + 1]);
-				}
-			}
-		}
-
-		REP(i, n) {
-			cout << a[i];
-		}
-		return a;
-	}
-};
-
-
-
 signed main()
 {
 	QUICK_CIN;
 	debug_input;
 
-	string s;
+	int t;
 
-	cin >> s;
+	cin >> t;
 
-	int n = s.size()+1;
+	REP(i, t) {
+		vi a;
+		
+		int n;
+		cin >> n;
+		scan(a, n+1, cin);
 
-	vi a;
+		vi result(a.size(),0);
+		vi po(a.size(), 0);
+		vi sums(a.size(), 0);
 
-	REP(i, n) {
-		a.push_back(i + 1);
-	}
+		int len = a.size();
 
-	REP(i, n - 1) {
-		REP(j, n - 1) {
-			if (s[j] == 'D'&&a[j] < a[j + 1]) {
-				swap(a[j], a[j + 1]);
-			}
+		int k = 1;
+		po[0] = 1;
+		REP(i, len-1) {
+			po[i + 1] = k;
+			k *= 2;
+			k %= mod;
 		}
-	}
 
-	REP(i, n) {
-		cout << a[i] << ",";
+		sums[0] = 0;
+		REP(i, len-1) {
+			sums[i + 1] = sums[i] + po[i] * a[i];
+		}
+
+		result[0] = a[0];
+
+		REP(i, len-1) {
+			result[i + 1] = 2 * (result[i] + a[i + 1] * sums[i]);
+		}
+
+		cout << result.back() << endl;
 	}
 }
