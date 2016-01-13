@@ -21,8 +21,7 @@
 #include <fstream>
 #include <deque>
 #include <bitset>
-
-
+using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
 #if defined(_MSC_VER)||__cplusplus > 199711L
@@ -31,56 +30,30 @@
 #define AUTO(r,v) typeof(v) r = (v)
 #endif
 #define ALL(c) (c).begin() , (c).end()
-#define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();++it)
+#define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
-#define int LL
+#define lint LL
 #define inf  ((int)1 << 54)
-#define DIV 1000000007
+#define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
-#define InitArr1(c,n) memset(&c[0],0,sizeof(int)*n)
-#define InitArr2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define vscan(a) int _c_; cin >> _c_; (a).push_back(_c_);
+#define lowb lower_bound
+#define upb upper_bound
+#define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
+#define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n)
 #define debug_input fstream cin("input.txt");ofstream cout("output.txt");
-
-template<class T>
-bool valid(T x, T w) { return 0 <= x&&x < w; }
-
-int di[4] = { 1, -1, 0, 0 };
-int dj[4] = { 0, 0, 1, -1 };
-
-using namespace std;
-
+#define pb(a) push_back(a)
+template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
+using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
+template<class T>bool valid(T x, T w) { return 0 <= x&&x < w; }
+int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
-
 
 
 signed main()
 {
 	QUICK_CIN;
-	//debug_input;
+	debug_input;
 
-	int a, b, c;
-	int aa, bb, cc;
-
-	cin >> a >> b >> c >> aa >> bb >> cc;
-
-	int da = a - aa;
-	int db = b - bb;
-	int dc = c - cc;
-
-	int sum = 0;
-
-	sum += da > 0 ? da / 2 : da;
-	sum += db > 0 ? db / 2 : db;
-	sum += dc > 0 ? dc / 2 : dc;
-
-	if (sum >= 0) {
-		cout << "Yes" << endl;
-	}else{
-		cout << "No" << endl;
-	}
-
-	return 0;
 }

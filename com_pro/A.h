@@ -1,4 +1,3 @@
-#pragma once
 #define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <vector>
@@ -33,9 +32,9 @@ using namespace std;
 #define ALL(c) (c).begin() , (c).end()
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
-#define int LL
+#define lint LL
 #define inf  ((int)1 << 54)
-#define DIV 1000000007
+#define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
@@ -52,64 +51,9 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 
-
-class StandInLine {
-public:
-	vector <int> reconstruct(vector <int> left)
-	{
-
-		int n;
-		vi a = left;
-
-		n = left.size();
-
-		vi aa(n, -1);
-
-		REP(i, n) {
-			int it = a[i];
-			for (auto& y : aa) {
-				if (y < 0) {
-					--it;
-					if (it < 0) {
-						y = i + 1;
-						break;
-					}
-				}
-			}
-		}
-
-		return aa;
-	}
-};
-
-
 signed main()
 {
 	QUICK_CIN;
 	debug_input;
-
-	int n;
-	vi a;
-	cin >> n;
-	scan(a, n, cin);
-	vi aa(n, -1);
-
-	REP(i,n){
-		int it = a[i];
-		for (auto& y : aa) {
-			if (y < 0) {
-				--it;
-				if (it < 0) {
-					y = i+1;
-					break;
-				}
-			}
-		}
-	}
-
-	for (auto x : aa) {
-		cout << x << " ";
-	}
-	cout << endl;
 
 }

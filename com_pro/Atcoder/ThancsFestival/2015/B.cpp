@@ -39,8 +39,6 @@
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define InitArr1(c,n) memset(&c[0],0,sizeof(int)*n)
 #define InitArr2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define vscan(a) int _c_; cin >> _c_; (a).push_back(_c_);
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
 
 template<class T>
 bool valid(T x, T w) { return 0 <= x&&x < w; }
@@ -54,45 +52,77 @@ using namespace std;
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-vector<string> voters;
-
-bool c[55];
-
-class InstantRunoffVoting {
-public:
-	int winner(vector <string> voters)
-	{
-
-	}
-};
-
 signed main()
 {
 	QUICK_CIN;
-	//debug_input;
+	//fstream cin("debug.txt");
+	//ofstream cout("result.txt");
 
-	int num;
-	
-	REP(i, num) {
-		string a;
-		cin >> a;
-		voters.push_back(a);
+	vector<int>a, b;
+	int c;
+
+	REP(i, 2) {
+		int c;
+		cin >> c;
+		a.push_back(c);
+	}
+	REP(i, 2) {
+		int c;
+		cin >> c;
+		b.push_back(c);
 	}
 
-	int n = voters[0].size();
+	cin >> c;
+	bool fa(false), fb(false);
 
-	map<string, int> ma;
-	REP(i, n) {
-		ma[std::to_string(i)] = 0;
+	REP(i, 2) {
+		if (a[i] == c)fa = true;
+		if (b[i] == c)fb = true;
 	}
 
-	REP(i, n) {
-		REP(j, n) {
-			ma[std::to_string(voters[j][i])]++;
+	auto func = [](vector<int> an)
+	{
+		sort(ALL(an));
+
+		cout << an.size() << endl;
+
+		for (auto x : an) {
+			cout << x << endl;
 		}
-		max_element(ALL(ma), [](pair<string, int> a, pair<string, int> b) {return a.second <= b.second; });
+	};
+
+	vector<int> ans;
+
+	if (fa && !fb) {
+		ans.push_back(b[0]);
+		if (b[0] != b[1]) {
+			ans.push_back(b[1]);
+		}
+
+		func(ans);
+
+		return 0;
 	}
+	if (!fa && fb) {
+		ans.push_back(a[0]);
+		if (a[0] != a[1]) {
+			ans.push_back(a[1]);
+		}
+
+		func(ans);
+
+		return 0;
+	}
+
+	if (fa && fb) {
+		vector<int> ans = { a[0] , a[1] , b[0] , b[1] };
+		sort(ALL(ans));
+		ans.erase(unique(ALL(ans)), ans.end());
+		func(ans);
+		return 0;
+	}
+
+
 
 	return 0;
 }
-	
