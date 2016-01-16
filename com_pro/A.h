@@ -54,6 +54,23 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 signed main()
 {
 	QUICK_CIN;
-	debug_input;
+//	debug_input;
 
+	int a, b;
+	int mm = 2000000000;
+	int mn = 1;
+
+	cin >> a >> b;
+	int ans = 0;
+
+	if (a < b) {
+		ans += b - a - 1;
+		ans += a - mn;
+	}
+	else {
+		ans += a - b - 1;
+		ans += mm - a;
+	}
+
+	cout << ans << endl;
 }

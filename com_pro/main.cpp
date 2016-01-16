@@ -1,4 +1,5 @@
-#define A
+
+#define B
 
 #ifdef A
 #include "A.h"
