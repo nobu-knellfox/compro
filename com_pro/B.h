@@ -50,52 +50,23 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-
-using tu = tuple<int, int, int>;
-vi a;
-vector<tu> tus;
-bool ed[12];
-
-bool f(int i,bool t)
-{
-	if (tus.size() <= i) {
-		return t;
-	}
-
-	REPS(i, j, tus.size()) {
-		auto x = tus[j];
-
-		if (!(ed[get<0>(x)] || ed[get<1>(x)] || ed[get<2>(x)])) {
-			ed[get<0>(x)] = true;
-			ed[get<1>(x)] = true;
-			ed[get<2>(x)] = true;
-
-			return f(j + 1, !t);
-		}
-	}
-
-	return !t;
-}
-
 signed main()
 {
 	QUICK_CIN;
 	debug_input;
+	
 
+	string str;
+	set<string> se;
+	int count = 0;
 	int n;
-	cin >> n;
+	cin >> str >> n;
 
-	scan(a, n, cin);
-
-
-	REP(i, n) {
-		REPS(i, j, n) {
-			REPS(j, k, n) {
-				if(!(a[i] < a[j] && a[j] < a[k] || a[i] > a[j] && a[j] > a[k]))
-					tus.push_back(make_tuple(i, j, k));
-			}
+	for (int i = 0; i + n - 1 < str.size(); ++i) {
+		if (se.count(str.substr(i, n)) == 0) {
+			count++;
+			se.insert(str.substr(i,n));
 		}
 	}
-
-
+	cout << count << endl;
 }

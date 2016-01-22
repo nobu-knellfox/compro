@@ -32,7 +32,7 @@ using namespace std;
 #define ALL(c) (c).begin() , (c).end()
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
-#define lint LL
+#define int LL
 #define inf  ((int)1 << 54)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
@@ -54,6 +54,50 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 signed main()
 {
 	QUICK_CIN;
-	debug_input;
+//	debug_input;
 
+	vi a;
+	int n, k;
+	cin >> n >> k;
+
+	scan(a, n, cin);
+
+	int c = 1;
+	int ma = 0;
+
+	int le = 0;
+	int ri = 0;
+
+	for (auto x : a) {
+		if (x == 0) {
+			cout << a.size() << endl;
+			return 0;
+		}
+	}
+
+	if (k == 0) {
+		cout << 0 << endl;
+		return 0;
+	}
+
+	while (ri < n) {
+		while (ri < n && c * a[ri] <= k) {
+			c *= a[ri];
+			ma = max(ri - le + 1 , ma);
+			++ri;
+		}
+
+		if (ri >= n)break;
+
+		while (c * a[ri] > k && le < ri) {
+			c /= a[le];
+			++le;
+		}
+		if (le == ri && c * a[ri] > k) {
+			++ri;
+			++le;
+		}
+	}
+	cout << ma << endl;
 }
+

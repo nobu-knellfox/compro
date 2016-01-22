@@ -1,5 +1,5 @@
 
-#define B
+#define TOPCODER
 
 #ifdef A
 #include "A.h"
@@ -17,7 +17,10 @@
 #include "D.h"
 #endif
 
+#ifdef TOPCODER
+#include "topcoder.h"
+#endif
 
 #ifdef SUB
-#include "Sub.h"
+#include "sub.h"
 #endif
