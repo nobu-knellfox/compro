@@ -51,103 +51,81 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 
-class ShipLoading {
+class OrderedNim {
 public:
-	int minimumTime(vector <int> cranes, vector <string> boxes)
+	string winner(vector <int> layout)
 	{
-		sort(ALL(cranes));
+		int k = 0;
+		vi a = layout;
 
-		vvi box;
+		bool b = false;
 
-		for (auto x : boxes) {
-			vi a;
-			stringstream ss;
-			ss << x;
-			string tmp;
-			while (getline(ss, tmp, ' ')) {
-				a.push_back(stoi(tmp));
-			}
-			box.push_back(a);
+		a.pop_back();
+
+		if (a.empty()) {
+			return "Alice";
 		}
 
-		int count = 0;
-		bool f = false;
-		while (!box.empty()) {
-			vi temp = cranes;
-			EACH(it, box) {
-				f = false;
+		int it = 0;
+		b = a[it] == 1;
+		++it;
 
-				while (lower_bound(ALL(temp), *(it->begin())) != temp.end()) {
-					temp.erase(lower_bound(ALL(temp), *(it->begin())));
-					it->erase(it->begin());
-
-					if (it->empty()) {
-						it = box.erase(it);
-						f = true;
-						break;
-					}
+		for (; it < a.size(); ++it) {
+			if (a[it] == 1) {
+				if (a[it - 1] < 2) {
+					b != b;
 				}
-				if (!f) {
-					++it;
-				}
-			}
-			count++;
-
-			if (temp.size() == cranes.size()) {
-				return -1;
 			}
 		}
-		return count + 1;
+
+		if (!b) {
+			return "Alice";
+		}
+		else {
+			return "Bob";
+		}
 	}
 };
 
 signed main()
 {
 	QUICK_CIN;
-	//debug_input;
+	debug_input;
 
-	vector <string> boxes = { "221 882 504 358 642 674 212 679 203 279 632 799 79" , "6 502 275 823 372 594 482 343" };
-	vector <int> cranes = { 56,114,979,120,120,87,480 };
-	sort(ALL(cranes));
+	int n;
+	cin >> n;
 
-	vvi box;
+	vi a = { 2 };
 
-	for (auto x : boxes) {
-		vi a;
-		stringstream ss;
-		ss << x;
-		string tmp;
-		while (getline(ss, tmp, ' ')) {
-			a.push_back(stoi(tmp));
-		}
-		box.push_back(a);
+	int k = 0;
+
+
+	bool b = false;
+
+	a.pop_back();
+
+	if (a.empty()) {
+		return;
 	}
 
-	int count = 0;
-	bool f = false;
-	while (!box.empty()) {
-		vi temp = cranes;
-		EACH(it, box) {
-			f = false;
+	int it = 0;
+	b = a[it] == 1;
+	++it;
 
-			while (lower_bound(ALL(temp), *(it->begin())) != temp.end()) {
-				temp.erase(lower_bound(ALL(temp), *(it->begin())));
-				it->erase(it->begin());
-
-				if (it->empty()) {
-					it = box.erase(it);
-					f = true;
-					break;
-				}
-			}
-			if (!f) {
-				++it;
+	for (; it < a.size(); ++it) {
+		if (a[it] == 1) {
+			if (a[it-1] < 2) {
+				b != b;
 			}
 		}
-		count++;
 	}
 
-	cout << count + 1 << endl;
+	if (!b) {
+		cout << "Alice";
+	}
+	else {
+		cout << "Bob";
+	}
 
 	return 0;
 }
