@@ -18,7 +18,7 @@
 #endif
 
 #ifdef TOPCODER
-#include "topcoder.h"
+#include "topcoder_main.h"
 #endif
 
 #ifdef SUB

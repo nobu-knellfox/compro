@@ -56,13 +56,12 @@ signed main()
 	QUICK_CIN;
 	//debug_input;
 
-	int a, b, c;
-	cin >> a >> b >> c;
+	string s = "DiscoPresentsDiscoveryChannelProgrammingContest2016";
+	int n;
 
-	REP(i, 30001) {
-		if (i%a == 0 && i % b == 0 && i >= c) {
-			cout << i << endl;
-			break;
-		}
+	cin >> n;
+
+	REP(i, ((s.size()-1) / n) + 1) {
+		cout << s.substr(n*i, n) << endl;
 	}
 }

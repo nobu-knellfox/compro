@@ -50,54 +50,104 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
+struct edge {
+	int to, cost;
+};
+
+map<int, vector<edge>> majidesuno;
+
+bool ed[100000];
+
+int mdist[1000][1000];
+int dist[1000][1000];
 
 signed main()
 {
 	QUICK_CIN;
-//	debug_input;
+	//	debug_input;
 
-	vi a;
-	int n, k;
-	cin >> n >> k;
+	int n;
+	cin >> n;
+	vector<vector<edge>> gra(n);
 
-	scan(a, n, cin);
+	int m;
+	cin >> m;
 
-	int c = 1;
-	int ma = 0;
+	int s, g;
+	cin >> s >> g;
 
-	int le = 0;
-	int ri = 0;
-
-	for (auto x : a) {
-		if (x == 0) {
-			cout << a.size() << endl;
-			return 0;
+	REP(i, 1000) {
+		REP(j, 1000) {
+			mdist[i][j] = inf;
+			dist[i][j] = inf;
+			if (i == j) {
+				dist[i][j] = 0;
+			}
 		}
 	}
 
-	if (k == 0) {
-		cout << 0 << endl;
-		return 0;
+	REP(i, m) {
+		int h;
+		cin >> h;
+
+		int s1, g1, c1;
+
+		vi s, w;
+
+		scan(s, h, cin);
+		scan(w, h - 1, cin);
+
+		int sum = 0;
+
+		REP(i, h - 1) {
+			gra[s[i]].push_back({ s[i + 1],w[i] });
+			gra[s[i + 1]].push_back({ s[i],w[i] });
+
+			dist[s[i]][s[i + 1]] = dist[s[i + 1]][s[i]] = w[i];
+			sum += w[i];
+		}
+
+		majidesuno[s[0]].push_back({ s[h - 1],sum });
 	}
 
-	while (ri < n) {
-		while (ri < n && c * a[ri] <= k) {
-			c *= a[ri];
-			ma = max(ri - le + 1 , ma);
-			++ri;
-		}
-
-		if (ri >= n)break;
-
-		while (c * a[ri] > k && le < ri) {
-			c /= a[le];
-			++le;
-		}
-		if (le == ri && c * a[ri] > k) {
-			++ri;
-			++le;
+	REP(k, n) {
+		REP(i, n) {
+			REP(j, n) {
+				dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+			}
 		}
 	}
-	cout << ma << endl;
+
+	queue<edge> que;
+
+	que.push({ s,0 });
+
+	int ans = 0;
+
+	while (!que.empty()) {
+		auto now = que.front();
+		que.pop();
+		ed[now.to] = true;
+
+		if (now.to == g) {
+			break;
+		}
+
+		if (majidesuno.find(now.to) != majidesuno.end()) {
+			int temp = inf;
+			for (auto x : majidesuno[now.to]) {
+				temp = min(dist[x.to][g] + x.cost + now.cost, temp);
+			}
+			ans = max(temp, ans);
+		}
+
+		for (auto x : gra[now.to]) {
+			if (!ed[x.to]) {
+				que.push({ x.to, now.cost + x.cost});
+			}
+		}
+	}
+
+	cout << ans << endl;
 }
 

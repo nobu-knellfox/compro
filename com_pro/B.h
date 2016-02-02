@@ -40,7 +40,7 @@ using namespace std;
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
 #define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
+#define debug_input fstream cin("input.txt");ofstream cout("output.txt");string tmp;while(cin >> tmp){if(tmp[0]!='#')continue;
 #define pb(a) push_back(a)
 template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
 using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
@@ -50,23 +50,56 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
+vector<int> aa[100010];
+set<int> se;
+
 signed main()
 {
 	QUICK_CIN;
-	debug_input;
-	
+	debug_input
 
-	string str;
-	set<string> se;
-	int count = 0;
 	int n;
-	cin >> str >> n;
+	cin >> n;
 
-	for (int i = 0; i + n - 1 < str.size(); ++i) {
-		if (se.count(str.substr(i, n)) == 0) {
-			count++;
-			se.insert(str.substr(i,n));
-		}
+	REP(i, n) {
+		int c;
+		cin >> c;
+
+		int it = i;
+
+		if (i == 0)
+			it = n;
+
+		se.insert(c);
+		aa[c].push_back(it);
 	}
-	cout << count << endl;
+
+	for (auto& x : se) {
+		if (aa[x].size() != 1)
+			sort(ALL(aa[x]));
+	}
+
+	int count = 0;
+
+	auto it = aa[*(se.begin())].back();
+
+	if (it == n) {
+		it = 0;
+	}
+
+	se.erase(se.begin());
+
+	for (auto x : se) {
+		auto s = upper_bound(ALL(aa[x]), it);
+
+		if (s != aa[x].begin()) {
+			count++;
+			--s;
+		}
+
+		it = *s;
+	}
+
+	cout << count + 1 << endl;
+	}
 }

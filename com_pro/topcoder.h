@@ -50,82 +50,42 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-
-class OrderedNim {
+class StonesGame {
+	bool miho[1000001];
 public:
-	string winner(vector <int> layout)
+	string winner(int N, int M, int K, int L)
 	{
-		int k = 0;
-		vi a = layout;
 
-		bool b = false;
+		int n, m, k, h;
+		n = N;
+		m = M;
+		k = K;
+		h = L;
 
-		a.pop_back();
 
-		if (a.empty()) {
-			return "Alice";
+		for (int i = max(1, h - (k - 1)); i <= min(n, h + (k - 1)); i += (2 - (k == 2))) {
+			miho[i] = true;
 		}
 
-		int it = 0;
-		b = a[it] == 1;
-		++it;
 
-		for (; it < a.size(); ++it) {
-			if (a[it] == 1) {
-				if (a[it - 1] < 2) {
-					b != b;
-				}
+		for (int i = max(1, m - (k - 1)); i <= min(n, m + (k - 1)); i += (2 - (k == 2))) {
+			if (i == h) {
+				return "Romeo";
 			}
 		}
 
-		if (!b) {
-			return "Alice";
+		bool f = true;
+
+		for (int i = max(1, m - (k - 1)); i <= min(n, m + (k - 1)); i += (2 - (k == 2))) {
+
+			f &= miho[i];
+
 		}
-		else {
-			return "Bob";
+		if (f) {
+			return "Strangelet";
 		}
+
+		return "Draw";
+
 	}
 };
-
-signed main()
-{
-	QUICK_CIN;
-	debug_input;
-
-	int n;
-	cin >> n;
-
-	vi a = { 2 };
-
-	int k = 0;
-
-
-	bool b = false;
-
-	a.pop_back();
-
-	if (a.empty()) {
-		return;
-	}
-
-	int it = 0;
-	b = a[it] == 1;
-	++it;
-
-	for (; it < a.size(); ++it) {
-		if (a[it] == 1) {
-			if (a[it-1] < 2) {
-				b != b;
-			}
-		}
-	}
-
-	if (!b) {
-		cout << "Alice";
-	}
-	else {
-		cout << "Bob";
-	}
-
-	return 0;
-}

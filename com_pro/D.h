@@ -56,4 +56,21 @@ signed main()
 	QUICK_CIN;
 	debug_input;
 
+
+	int n,m,k;
+	vi a;
+	vi b;
+
+	cin >> n >> m >> k;
+
+
+	scan(a, n, cin);
+	scan(b, m, cin);
+
+	int suma = accumulate(ALL(a), 0);
+	int sumb = accumulate(ALL(b), 0);
+
+	int max = -1;
+
+
 }
