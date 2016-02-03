@@ -24,6 +24,7 @@
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
+#define RREP(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
 #if defined(_MSC_VER)||__cplusplus > 199711L
 #define AUTO(r,v) auto r = (v)
 #else
@@ -51,24 +52,22 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 struct edge {
-	int to, cost;
+	int to, cost,sum;
 };
 
-map<int, vector<edge>> majidesuno;
+vector<edge> graph[30000];
 
-bool ed[100000];
+bool ed[30000];
 
-int mdist[1000][1000];
-int dist[1000][1000];
+int tcost[30000];
 
 signed main()
 {
 	QUICK_CIN;
-	//	debug_input;
+	debug_input;
 
 	int n;
 	cin >> n;
-	vector<vector<edge>> gra(n);
 
 	int m;
 	cin >> m;
@@ -76,15 +75,7 @@ signed main()
 	int s, g;
 	cin >> s >> g;
 
-	REP(i, 1000) {
-		REP(j, 1000) {
-			mdist[i][j] = inf;
-			dist[i][j] = inf;
-			if (i == j) {
-				dist[i][j] = 0;
-			}
-		}
-	}
+	queue<int> endi;
 
 	REP(i, m) {
 		int h;
@@ -99,51 +90,77 @@ signed main()
 
 		int sum = 0;
 
-		REP(i, h - 1) {
-			gra[s[i]].push_back({ s[i + 1],w[i] });
-			gra[s[i + 1]].push_back({ s[i],w[i] });
-
-			dist[s[i]][s[i + 1]] = dist[s[i + 1]][s[i]] = w[i];
+		RREP(i, h-1) {
+			graph[s[i]].push_back({ s[i + 1],w[i],sum*2 });
+			graph[s[i + 1]].push_back({ s[i],w[i],sum*2 });
 			sum += w[i];
-		}
 
-		majidesuno[s[0]].push_back({ s[h - 1],sum });
-	}
-
-	REP(k, n) {
-		REP(i, n) {
-			REP(j, n) {
-				dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+			if (i == h - 2) {
+				endi.push(s[i+1]);
 			}
 		}
 	}
 
-	queue<edge> que;
+	auto comp = [](edge a, edge b)
+	{
+		return a.sum + a.cost > b.sum + b.cost;
+	};
 
-	que.push({ s,0 });
+
+	priority_queue<edge, vector<edge>, decltype(comp)> que(comp);
+
+
+	int ans = 0;
+
+	while (endi.size()) {
+		auto xx = endi.front();
+		endi.pop();
+		
+		que.push({ xx,0,0 });
+		while (!que.empty()) {
+			auto now = que.top();
+			que.pop();
+			ed[now.to] = true;
+
+			if (now.to == g) {
+				tcost[xx] 
+				break;
+			}
+
+			for (auto x : graph[now.to]) {
+				if (!ed[x.to]) {
+					que.push({ x.to, now.cost + x.cost ,max(now.sum,x.sum) });
+				}
+			}
+		}
+	}
+
+
+
+
+
+
+
+
+	priority_queue<edge, vector<edge>, decltype(comp)> que(comp);
+
+	que.push({ s,0,0 });
 
 	int ans = 0;
 
 	while (!que.empty()) {
-		auto now = que.front();
+		auto now = que.top();
 		que.pop();
 		ed[now.to] = true;
 
 		if (now.to == g) {
+			ans = now.sum + now.cost;
 			break;
 		}
 
-		if (majidesuno.find(now.to) != majidesuno.end()) {
-			int temp = inf;
-			for (auto x : majidesuno[now.to]) {
-				temp = min(dist[x.to][g] + x.cost + now.cost, temp);
-			}
-			ans = max(temp, ans);
-		}
-
-		for (auto x : gra[now.to]) {
+		for (auto x : graph[now.to]) {
 			if (!ed[x.to]) {
-				que.push({ x.to, now.cost + x.cost});
+				que.push({x.to, now.cost + x.cost ,max(now.sum,x.sum) });
 			}
 		}
 	}
@@ -151,3 +168,4 @@ signed main()
 	cout << ans << endl;
 }
 
+;
