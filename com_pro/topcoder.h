@@ -51,41 +51,9 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 class StonesGame {
-	bool miho[1000001];
 public:
 	string winner(int N, int M, int K, int L)
 	{
-
-		int n, m, k, h;
-		n = N;
-		m = M;
-		k = K;
-		h = L;
-
-
-		for (int i = max(1, h - (k - 1)); i <= min(n, h + (k - 1)); i += (2 - (k == 2))) {
-			miho[i] = true;
-		}
-
-
-		for (int i = max(1, m - (k - 1)); i <= min(n, m + (k - 1)); i += (2 - (k == 2))) {
-			if (i == h) {
-				return "Romeo";
-			}
-		}
-
-		bool f = true;
-
-		for (int i = max(1, m - (k - 1)); i <= min(n, m + (k - 1)); i += (2 - (k == 2))) {
-
-			f &= miho[i];
-
-		}
-		if (f) {
-			return "Strangelet";
-		}
-
-		return "Draw";
 
 	}
 };

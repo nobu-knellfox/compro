@@ -40,7 +40,7 @@ using namespace std;
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
 #define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");string tmp;while(cin >> tmp){if(tmp[0]!='#')continue;
+#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
 #define pb(a) push_back(a)
 template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
 using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
