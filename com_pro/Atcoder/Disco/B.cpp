@@ -49,55 +49,65 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
- 
-vector<int> aa[500000];
+
+vector<int> aa[100001];
 set<int> se;
- 
+
 signed main()
 {
 	QUICK_CIN;
-	
+	//debug_input;
+
 	int n;
 	cin >> n;
- 
+
 	REP(i, n) {
 		int c;
 		cin >> c;
-		
+
 		int it = i;
- 
+
 		if (i == 0)
 			it = n;
- 
+
 		se.insert(c);
 		aa[c].push_back(it);
 	}
- 
+
 	for (auto& x : se) {
-		if(aa[x].size() != 1)
+		if (aa[x].size() != 1)
 			sort(ALL(aa[x]));
 	}
- 
+
 	int count = 0;
- 
+
 	auto it = aa[*(se.begin())].back();
- 
+
+
 	if (it == n) {
-		it = 0;
+		if (aa[*(se.begin())].size() < 2) {
+			it = 0;
+		}
+		else {
+			it = *(aa[*(se.begin())].end() - 2);
+		}
 	}
- 
+
 	se.erase(se.begin());
- 
+
 	for (auto x : se) {
 		auto s = upper_bound(ALL(aa[x]), it);
-		
+
 		if (s != aa[x].begin()) {
 			count++;
-			--s;
+			s--;
 		}
- 
+		else {
+			s = aa[x].end() - 1;
+		}
+
 		it = *s;
 	}
- 
+
 	cout << count + 1 << endl;
 }
