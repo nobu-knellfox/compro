@@ -24,7 +24,7 @@
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
-#define RREP(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
+#define REVERSE(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
 #if defined(_MSC_VER)||__cplusplus > 199711L
 #define AUTO(r,v) auto r = (v)
 #else
@@ -52,12 +52,13 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 struct edge {
-	int to, cost,sum;
+	int to, cost, sum, endi;
 };
 
 vector<edge> graph[30000];
 
 bool ed[30000];
+bool ed1[30000];
 
 int tcost[30000];
 
@@ -75,7 +76,6 @@ signed main()
 	int s, g;
 	cin >> s >> g;
 
-	queue<int> endi;
 
 	REP(i, m) {
 		int h;
@@ -90,82 +90,71 @@ signed main()
 
 		int sum = 0;
 
-		RREP(i, h-1) {
-			graph[s[i]].push_back({ s[i + 1],w[i],sum*2 });
-			graph[s[i + 1]].push_back({ s[i],w[i],sum*2 });
+		REVERSE(i, h - 1) {
 			sum += w[i];
+			graph[s[i]].push_back({ s[i + 1],w[i],sum,s[h - 1] });
+		}
 
-			if (i == h - 2) {
-				endi.push(s[i+1]);
-			}
+		sum = 0;
+		REP(i, h - 1) {
+			sum += w[i];
+			graph[s[i + 1]].push_back({ s[i],w[i],sum,s[0] });
 		}
 	}
 
 	auto comp = [](edge a, edge b)
 	{
-		return a.sum + a.cost > b.sum + b.cost;
+		return a.sum > b.sum;
 	};
 
+	auto comp1 = [](edge a, edge b)
+	{
+		return a.cost > b.cost;
+	};
 
-	priority_queue<edge, vector<edge>, decltype(comp)> que(comp);
+	priority_queue<edge, vector<edge>, decltype(comp1)> que1(comp1);
 
+	que1.push({ g,0,0 });
 
-	int ans = 0;
+	while (!que1.empty()) {
+		auto now = que1.top();
+		que1.pop();
 
-	while (endi.size()) {
-		auto xx = endi.front();
-		endi.pop();
-		
-		que.push({ xx,0,0 });
-		while (!que.empty()) {
-			auto now = que.top();
-			que.pop();
-			ed[now.to] = true;
+		if (!ed1[now.to])
+			tcost[now.to] = now.cost;
 
-			if (now.to == g) {
-				tcost[xx] 
-				break;
-			}
+		ed1[now.to] = true;
 
-			for (auto x : graph[now.to]) {
-				if (!ed[x.to]) {
-					que.push({ x.to, now.cost + x.cost ,max(now.sum,x.sum) });
-				}
+		for (auto x : graph[now.to]) {
+			if (!ed1[x.to]) {
+				que1.push({ x.to, now.cost + x.cost });
 			}
 		}
 	}
-
-
-
-
-
-
-
 
 	priority_queue<edge, vector<edge>, decltype(comp)> que(comp);
 
 	que.push({ s,0,0 });
 
-	int ans = 0;
+	int ans = inf;
 
 	while (!que.empty()) {
 		auto now = que.top();
 		que.pop();
-		ed[now.to] = true;
 
-		if (now.to == g) {
-			ans = now.sum + now.cost;
-			break;
+		if (now.to != g) {
+			ed[now.to] = true;
+		}
+		else {
+			ans = min(ans, now.sum);
 		}
 
 		for (auto x : graph[now.to]) {
 			if (!ed[x.to]) {
-				que.push({x.to, now.cost + x.cost ,max(now.sum,x.sum) });
+				que.push({ x.to, now.cost + x.cost ,max(now.sum,now.cost + x.sum + tcost[x.endi]) });
 			}
 		}
 	}
 
 	cout << ans << endl;
 }
-
-;
