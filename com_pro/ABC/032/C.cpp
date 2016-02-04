@@ -24,6 +24,7 @@
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
+#define REVERSE(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
 #if defined(_MSC_VER)||__cplusplus > 199711L
 #define AUTO(r,v) auto r = (v)
 #else
@@ -33,7 +34,7 @@ using namespace std;
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
 #define int LL
-#define inf  ((int)1 << 54)
+#define inf  1145141919
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
@@ -49,55 +50,52 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
-
-
+ 
+int n, k;
+ 
 signed main()
 {
 	QUICK_CIN;
-//	debug_input;
-
+ 
 	vi a;
-	int n, k;
+ 
 	cin >> n >> k;
-
-	scan(a, n, cin);
-
-	int c = 1;
-	int ma = 0;
-
-	int le = 0;
-	int ri = 0;
-
-	for (auto x : a) {
-		if (x == 0) {
-			cout << a.size() << endl;
+ 
+	REP(i, n) {
+		int c;
+		cin >> c;
+		if (c == 0) {
+			cout << n << endl;
 			return 0;
 		}
+		a.push_back(c);
 	}
-
-	if (k == 0) {
-		cout << 0 << endl;
-		return 0;
+ 
+	a.push_back(inf);
+ 
+	int left(0), right(0);
+ 
+	int kk = 1;
+ 
+	int maxlen = 0;
+ 
+	while (right < n) {
+		while (kk <= k && right < n+1) {
+			kk *= a[right];
+			right++;
+			maxlen = max(maxlen, right - left - 1);
+		}
+ 
+		while (k < kk && left < right) {
+			kk /= a[left];
+			left++;
+		}
+ 
+		if (k < kk) {
+			right++;
+			left++;
+		}
 	}
-
-	while (ri < n) {
-		while (ri < n && c * a[ri] <= k) {
-			c *= a[ri];
-			ma = max(ri - le + 1 , ma);
-			++ri;
-		}
-
-		if (ri >= n)break;
-
-		while (c * a[ri] > k && le < ri) {
-			c /= a[le];
-			++le;
-		}
-		if (le == ri && c * a[ri] > k) {
-			++ri;
-			++le;
-		}
-	}
-	cout << ma << endl;
+ 
+	cout << maxlen << endl;
 }
-
