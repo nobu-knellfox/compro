@@ -21,9 +21,11 @@
 #include <fstream>
 #include <deque>
 #include <bitset>
+#include <complex>
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
+#define REVERSE(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
 #if defined(_MSC_VER)||__cplusplus > 199711L
 #define AUTO(r,v) auto r = (v)
 #else
@@ -32,15 +34,20 @@ using namespace std;
 #define ALL(c) (c).begin() , (c).end()
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
-#define lint LL
-#define inf  ((int)1 << 54)
+#define int LL
+#define inf  (1LL << 50)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
-#define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
+#define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n
+#ifdef _DEBUG
+#define debug_io fstream cin("input.txt");ofstream cout("output.txt");
+#else
+#define debug_io ;
+#endif
+#define debug_input debug_io
 #define pb(a) push_back(a)
 template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
 using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
@@ -50,27 +57,81 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-
 signed main()
 {
 	QUICK_CIN;
 	debug_input;
 
+	using com = complex<double>;
 
-	int n,m,k;
-	vi a;
-	vi b;
+	vector<com> points;
 
-	cin >> n >> m >> k;
+	int n;
+	cin >> n;
+	REP(i,n) {
+		double x, y;
+		cin >> x >> y;
+		points.push_back({ x,y });
+	}
+
+	int numa = 0;
+	int numb = 0;
+
+	sort(ALL(points) ,[](com a, com b)
+	{
+		return a.real() < b.real();
+	});
+
+	REP(i, n) {
+		REPS(i + 1, j, n) {
+			bool rightup = points[i].imag() < points[j].imag();
 
 
-	scan(a, n, cin);
-	scan(b, m, cin);
+			double dx = points[j].real() - points[i].real();
+			double dy = points[j].imag() - points[i].imag();
 
-	int suma = accumulate(ALL(a), 0);
-	int sumb = accumulate(ALL(b), 0);
+			//dx = dx*dx / len;
+			if(dy != 0)
+				dy = -dx/dy;
 
-	int max = -1;
+			REPS(j + 1, k, n) {
+				auto _i = points[i];
+				auto _j = points[j];
+				auto _k = points[k];
+
+				if (_i.real() == _j.real() && (_i.imag() == _k.imag() || _j.imag() == _k.imag()))
+					continue;
+				if (_i.real() == _k.real() && (_i.imag() == _j.imag() || _k.imag() == _j.imag()))
+					continue;
+				if (_j.real() == _k.real() && (_j.imag() == _i.imag() || _k.imag() == _i.imag()))
+					continue;
 
 
+				auto tx = points[k].imag();
+
+				auto ry = (points[k].real() - points[j].real())*dy + points[j].imag();
+				auto ly = (points[k].real() - points[i].real())*dy + points[i].imag();
+
+				if (rightup) {
+					if (tx < ry && ly < tx) {
+						numa++;
+					}
+					else if (tx >ry || ly > tx) {
+						numb++;
+					}
+				}
+				else {
+					if (tx < ly && ry < tx) {
+						numa++;
+					}
+					else if (tx > ly || ry > tx) {
+						numb++;
+					}
+				}
+			}
+		}
+	}
+
+	cout << numa << endl;
+	cout << numb << endl;
 }

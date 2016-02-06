@@ -55,77 +55,77 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
- 
- 
+
+
 struct P {
 	int v;
 	int w;
 };
- 
+
 int n, w;
- 
+
 int dp[1001 * 201];
- 
+
 vector<P> a;
- 
+
 vector<P> aa;
 vector<P> bb;
- 
+
 int f(int i, int vv, int ww, int b)
 {
 	if (i == b) {
 		aa.push_back({ vv,ww });
 		return 0;
 	}
- 
+
 	if (ww + a[i].w <= w)
 		return max(f(i + 1, vv, ww, b), f(i + 1, vv + a[i].v, ww + a[i].w, b));
- 
+
 	return f(i + 1, vv, ww, b);
 }
- 
+
 int f2(int i, int vv, int ww, int b)
 {
 	if (i == b) {
 		bb.push_back({ vv,ww });
 		return 0;
 	}
- 
+
 	if (ww + a[i].w <= w)
 		return max(f2(i + 1, vv, ww, b), f2(i + 1, vv + a[i].v, ww + a[i].w, b));
- 
+
 	return f2(i + 1, vv, ww, b);
 }
- 
+
 signed main()
 {
 	QUICK_CIN;
 	debug_input;
- 
- 
+
+
 	cin >> n >> w;
- 
- 
+
+
 	int fl = 2;
- 
+
 	REP(i, n) {
 		int c, d;
 		cin >> c >> d;
- 
+
 		a.push_back({ c,d });
 	}
- 
- 
+
+
 	int ans = 0;
- 
+
 	int sumV = 0;
 	int sumW = 0;
 	for (auto x : a) {
 		sumV += x.v;
 		sumW += x.w;
 	}
- 
- 
+
+
 	if (sumV < 201 * 1001) {
 		fl = 1;
 	}
@@ -135,16 +135,16 @@ signed main()
 	else {
 		fl = 0;
 	}
- 
+
 	if (fl == 0) {
 		f(0, 0, 0, n / 2);
 		f2(n / 2, 0, 0, n);
- 
+
 		sort(ALL(aa), [](P a, P b)
 		{
 			return a.v > b.v;
 		});
- 
+
 		for (auto x : bb) {
 			REP(j, aa.size()) {
 				if (x.w + aa[j].w <= w) {
@@ -154,45 +154,45 @@ signed main()
 			}
 		}
 	}
- 
- 
+
+
 	else if (fl == 1) {
 		REP(i, 1001 * 201) {
 			dp[i] = inf;
 		}
- 
+
 		dp[0] = 0;
- 
+
 		REP(i, n) {
-			for (int j = sumV; j >= a[i].v;--j) {
+			for (int j = sumV; j >= a[i].v; --j) {
 				dp[j] = min(dp[j], dp[j - a[i].v] + a[i].w);
 			}
 		}
- 
-		REP(i, sumV+1) {
+
+		REP(i, sumV + 1) {
 			if (dp[i] <= w)
 				ans = max(i, ans);
 		}
 	}
- 
- 
+
+
 	else if (fl == 2) {
 		REP(i, 1001 * 201) {
 			dp[i] = -inf;
 		}
- 
+
 		dp[0] = 0;
- 
+
 		REP(i, n) {
-			for (int j = sumW; j >= a[i].w; --j){
+			for (int j = sumW; j >= a[i].w; --j) {
 				dp[j] = max(dp[j], dp[j - a[i].w] + a[i].v);
 			}
 		}
 		REP(i, sumW + 1) {
-			if(i <= w)
-				ans = max(ans,dp[i]);
+			if (i <= w)
+				ans = max(ans, dp[i]);
 		}
 	}
- 
+
 	cout << ans << endl;
 }

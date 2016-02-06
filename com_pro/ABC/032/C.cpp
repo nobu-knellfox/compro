@@ -50,17 +50,17 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
- 
+
 int n, k;
- 
+
 signed main()
 {
 	QUICK_CIN;
- 
+
 	vi a;
- 
+
 	cin >> n >> k;
- 
+
 	REP(i, n) {
 		int c;
 		cin >> c;
@@ -70,32 +70,32 @@ signed main()
 		}
 		a.push_back(c);
 	}
- 
+
 	a.push_back(inf);
- 
+
 	int left(0), right(0);
- 
+
 	int kk = 1;
- 
+
 	int maxlen = 0;
- 
+
 	while (right < n) {
-		while (kk <= k && right < n+1) {
+		while (kk <= k && right < n + 1) {
 			kk *= a[right];
 			right++;
 			maxlen = max(maxlen, right - left - 1);
 		}
- 
+
 		while (k < kk && left < right) {
 			kk /= a[left];
 			left++;
 		}
- 
+
 		if (k < kk) {
 			right++;
 			left++;
 		}
 	}
- 
+
 	cout << maxlen << endl;
 }

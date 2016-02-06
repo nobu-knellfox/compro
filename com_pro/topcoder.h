@@ -50,10 +50,42 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-class StonesGame {
+
+class LateProfessor {
 public:
-	string winner(int N, int M, int K, int L)
+
+
+	double getProbability(int waitTime, int walkTime, int lateTime, int bestArrival, int worstArrival)
 	{
+
+		int wait, walk, late, best, worst;
+
+		wait = waitTime;
+		walk = walkTime;
+		late = lateTime;
+		best = bestArrival;
+		worst = worstArrival;
+
+		int sum = 0;
+
+		REPS(best + 1 - (int)(worst == best), i, worst + 1) {
+			int k = i % (wait + walk);
+
+			if (k <= wait) {
+				continue;
+			}
+
+			k = (wait + walk) - k;
+			if (late <= k) {
+				++sum;
+			}
+		}
+
+		if (worst == best) {
+			return (double)sum << endl;
+		}
+
+		return (double)sum / (worst - best);
 
 	}
 };
