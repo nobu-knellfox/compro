@@ -1,5 +1,5 @@
 
-#define C
+#define TOPCODER
 
 #ifdef A
 #include "A.h"

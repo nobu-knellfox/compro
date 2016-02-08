@@ -21,7 +21,6 @@
 #include <fstream>
 #include <deque>
 #include <bitset>
-#include <complex>
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
@@ -35,13 +34,14 @@ using namespace std;
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
 #define int LL
-#define inf  (1LL << 50)
+#define inf  (int)(1 << 50)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
 #define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n
+#define pl(a) cout << ""#a": " << a << endl;
 #ifdef _DEBUG
 #define debug_io fstream cin("input.txt");ofstream cout("output.txt");
 #else

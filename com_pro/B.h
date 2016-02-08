@@ -24,6 +24,7 @@
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
+#define REVERSE(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
 #if defined(_MSC_VER)||__cplusplus > 199711L
 #define AUTO(r,v) auto r = (v)
 #else
@@ -32,15 +33,21 @@ using namespace std;
 #define ALL(c) (c).begin() , (c).end()
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
-#define lint LL
-#define inf  ((int)1 << 54)
+#define int LL
+#define inf  (int)(1 << 50)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
-#define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
+#define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n
+#define pl(a) cout << ""#a": " << a << endl;
+#ifdef _DEBUG
+#define debug_io fstream cin("input.txt");ofstream cout("output.txt");
+#else
+#define debug_io ;
+#endif
+#define debug_input debug_io
 #define pb(a) push_back(a)
 template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
 using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
@@ -50,56 +57,39 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-vector<int> aa[100010];
-set<int> se;
-
 signed main()
 {
 	QUICK_CIN;
-	debug_input
+	debug_input;
 
-	int n;
-	cin >> n;
-
-	REP(i, n) {
-		int c;
-		cin >> c;
-
-		int it = i;
-
-		if (i == 0)
-			it = n;
-
-		se.insert(c);
-		aa[c].push_back(it);
-	}
-
-	for (auto& x : se) {
-		if (aa[x].size() != 1)
-			sort(ALL(aa[x]));
-	}
+	string s1, s2;
+	cin >> s1 >> s2;
 
 	int count = 0;
 
-	auto it = aa[*(se.begin())].back();
-
-	if (it == n) {
-		it = 0;
+	if (s1.size() < s2.size()) {
+		cout << 0 << endl;
+		return 0;
 	}
 
-	se.erase(se.begin());
-
-	for (auto x : se) {
-		auto s = upper_bound(ALL(aa[x]), it);
-
-		if (s != aa[x].begin()) {
-			count++;
-			--s;
+	REP(i, s1.size() - s2.size()+1) {
+		bool f = false;
+		REP(j, s2.size()) {
+			if (s1[i + j] != s2[j]) {
+				f = true;
+			}
 		}
 
-		it = *s;
+		if (!f) {
+			s1[i + s2.size()-1] = '#';
+		}
 	}
 
-	cout << count + 1 << endl;
+	for(auto x : s1) {
+		if (x == '#') {
+			count++;
+		}
 	}
+
+	cout << count << endl;
 }

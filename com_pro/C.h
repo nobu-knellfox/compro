@@ -34,13 +34,14 @@ using namespace std;
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
 #define int LL
-#define inf  (1LL << 50)
+#define inf  (int)(1 << 50)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
 #define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n
+#define pl(a) cout << ""#a": " << a << endl;
 #ifdef _DEBUG
 #define debug_io fstream cin("input.txt");ofstream cout("output.txt");
 #else
@@ -57,37 +58,45 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 
+int n, k;
+
+int a[501][501];
+
 signed main()
 {
 	QUICK_CIN;
 	debug_input;
 
-	vi a;
-	vi b;
+	cin >> n >> k;
+	--k;
 
-	int n, m;
-	int x, y;
-	cin >> n >> m >> x >> y;
-
-	scan(a, n, cin);
-	scan(b, m, cin);
-
-	int count = 0;
-	bool f = false;
-
-	auto nowa = a.begin();
-	auto nowb = b.begin();
-
-	while (nowa != a.end() && nowb != b.end()) {
-		if (!f) {
-			nowb = lower_bound(ALL(b), *nowa + x);
+	int aa = 1;
+	REP(i, n) {
+		REP(j, k) {
+			a[i][j] = aa++;
 		}
-		else {
-			nowa = lower_bound(ALL(a), *nowb + y);
-			count++;
-		}
-		f = !f;
 	}
 
-	cout << count << endl;
+	REP(i, n) {
+		REPS(k, j, n) {
+			a[i][j] = aa++;
+		}
+	}
+
+	int sum = 0;
+	REP(i, n) {
+		sum += a[i][k];
+	}
+
+	cout << sum << endl;
+
+	REP(i, n) {
+		REP(j, n) {
+			cout << a[i][j];
+			if (j != n - 1) {
+				cout << " ";
+			}
+		}
+		cout << endl;
+	}
 }
