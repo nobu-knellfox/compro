@@ -33,7 +33,7 @@ using namespace std;
 #define ALL(c) (c).begin() , (c).end()
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
-#define int LL
+#define lint LL
 #define inf  (int)(1 << 30)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
@@ -57,13 +57,56 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-class LateProfessor {
+int table[70][70];
+
+
+class TallPeople {
 public:
-
-
-	double getProbability(int waitTime, int walkTime, int lateTime, int bestArrival, int worstArrival)
+	vector <int> getPeople(vector <string> people)
 	{
 
 
+		vs a = people;
+
+		int i = 0;
+		int h(0), w(0);
+
+		for (auto x : a) {
+			stringstream ss(x);
+			string temp;
+			int j = 0;
+			while (ss >> temp) {
+				table[i][j] = stoi(temp);
+				++j;
+			}
+			++i;
+			w = j;
+		}
+		h = i;
+
+
+		int maxmin = -inf;
+		REP(i, h) {
+			int maxi = inf;
+			REP(j, w) {
+				maxi = min(table[i][j], maxi);
+			}
+			maxmin = max(maxmin, maxi);
+		}
+
+		int minmax = inf;
+		REP(j, w) {
+			int mini = -inf;
+			REP(i, h) {
+				mini = max(table[i][j], mini);
+			}
+			minmax = min(minmax, mini);
+		}
+
+		vi aa;
+		aa.push_back(maxmin);
+		aa.push_back(minmax);
+
+		return {maxmin,minmax};
 	}
 };

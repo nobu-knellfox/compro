@@ -1,70 +1,59 @@
 
 #include "topcoder.h"
 
-map<char, int> ma;
-using qq = queue<char>;
+//int table[70][70];
 
-vector<qq> ques;
 
 signed main()
 {
 	QUICK_CIN;
 	//debug_input;
 
-	string cand = "Z";
-	vs ballots = { "Z" };
+	vs a = { "9 2 3", "4 8 7" };
 
-	for (auto x : cand) {
-		ma[x] = 0;
+	int i = 0;
+	int h, w;
+
+	for (auto x : a) {
+		stringstream ss(x);
+		string temp;
+		int j = 0;
+		while (ss >> temp) {
+			table[i][j] = stoi(temp);
+			++j;
+		}
+		++i;
+		w = j;
+	}
+	h = i;
+
+	
+	int maxmin = -inf;
+	REP(i, h) {
+		int maxi = inf;
+		REP(j, w) {
+			maxi = min(table[i][j],maxi);
+		}
+		maxmin = max(maxmin,maxi);
 	}
 
-	for (auto x : ballots) {
-		qq now;
-		for (auto y : x) {
-			now.push(y);
+	int minmax = inf;
+	REP(j, w) {
+		int mini = -inf;
+		REP(i, h) {
+			mini = max(table[i][j], mini);
 		}
-		ques.push_back(now);
+		minmax = min(minmax, mini);
 	}
 
-	for (auto x : ques) {
-		ma[x.front()]++;
+	//return vector<int>({maxmin,minmax});
+
+	vi aa;
+	aa.push_back(maxmin);
+	aa.push_back(minmax);
+
+	for (auto x : aa) {
+		cout << x << endl;
 	}
-
-	int num = ballots.size();
-
-	while (!ma.empty()) {
-		int mini = inf;
-		for (auto x : ma) {
-			if (num / 2 < x.second) {
-				cout << x.first << endl;
-				return 0;
-			}
-			mini = min(x.second, mini);
-		}
-
-		EACH(it, ma) {
-			if (it->second == mini) {
-				it = ma.erase(it);
-			}
-			else {
-				++it;
-			}
-		}
-
-		for (auto& x : ques) {
-			if (x.size()) {
-				if (ma.find(x.front()) == ma.end()) {
-					while (x.size() && ma.find(x.front()) == ma.end()) {
-						x.pop();
-					}
-					if (x.size()) {
-						ma[x.front()]++;
-					}
-				}
-			}
-		}
-	}
-	cout << "" << endl;
-
 	return 0;
 }
