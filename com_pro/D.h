@@ -57,82 +57,81 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-int graph[1000000];
-int co[1000000];
-
 signed main()
 {
 	QUICK_CIN;
 	debug_input;
 
-	REP(i, 1000000) {
-		co[i] = -1;
+	using com = complex<double>;
+
+	vector<com> points;
+
+	int n;
+	cin >> n;
+	REP(i,n) {
+		double x, y;
+		cin >> x >> y;
+		points.push_back({ x,y });
 	}
 
-	int n, _a, a;
-	int div = 0;
-	int t;
+	int numa = 0;
+	int numb = 0;
 
-	string k;
-
-	cin >> n >> _a >> k;
-	_a--;
-	a = _a;
+	sort(ALL(points) ,[](com a, com b)
+	{
+		return a.real() < b.real();
+	});
 
 	REP(i, n) {
-		int c;
-		cin >> c;
-		c--;
-		graph[i] = c;
-	}
+		REPS(i + 1, j, n) {
+			bool rightup = points[i].imag() < points[j].imag();
 
-	int count = 0;
-	while (true) {
-		if (co[a] < 0) {
-			co[a] = count;
-			count++;
-			a = graph[a];
+
+			double dx = points[j].real() - points[i].real();
+			double dy = points[j].imag() - points[i].imag();
+
+			//dx = dx*dx / len;
+			if(dy != 0)
+				dy = -dx/dy;
+
+			REPS(j + 1, k, n) {
+				auto _i = points[i];
+				auto _j = points[j];
+				auto _k = points[k];
+
+				if (_i.real() == _j.real() && (_i.imag() == _k.imag() || _j.imag() == _k.imag()))
+					continue;
+				if (_i.real() == _k.real() && (_i.imag() == _j.imag() || _k.imag() == _j.imag()))
+					continue;
+				if (_j.real() == _k.real() && (_j.imag() == _i.imag() || _k.imag() == _i.imag()))
+					continue;
+
+
+				auto tx = points[k].imag();
+
+				auto ry = (points[k].real() - points[j].real())*dy + points[j].imag();
+				auto ly = (points[k].real() - points[i].real())*dy + points[i].imag();
+
+				if (rightup) {
+					if (tx < ry && ly < tx) {
+						numa++;
+					}
+					else if (tx >ry || ly > tx) {
+						numb++;
+					}
+				}
+				else {
+					if (tx < ly && ry < tx) {
+						numa++;
+					}
+					else if (tx > ly || ry > tx) {
+						numb++;
+					}
+				}
+			}
 		}
-		else {
-			div = count - co[a];
-			t = co[a];
-			break;
-		}
 	}
 
-	if (k.size() < 7) {
-		int now = _a;
-		count = 0;
-		while (count < stoi(k)) {
-			count++;
-			now = graph[now];
-		}
-
-		cout << now + 1 << endl;
-		return 0;
-	}
-
-	int kk = 0;
-	for (auto x : k) {
-		kk = (10 * kk + (x - '0') % div) % div;
-	}
-
-	int now = _a;
-	count = 0;
-	while (count < t) {
-		now = graph[now];
-		count++;
-	}
-	count = 0;
-	kk -= t;
-	while (kk < 0) {
-		kk += div;
-	}
-	while (count < kk%div) {
-		now = graph[now];
-		count++;
-	}
-
-	cout << now + 1 << endl;
-	return 0;
+	cout << numa << endl;
+	cout << numb << endl;
 }

@@ -57,64 +57,39 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-vector<int> aa[100001];
-set<int> se;
-
 signed main()
 {
 	QUICK_CIN;
-	//debug_input;
+	debug_input;
 
-	int n;
-	cin >> n;
-
-	REP(i, n) {
-		int c;
-		cin >> c;
-
-		int it = i;
-
-		if (i == 0)
-			it = n;
-
-		se.insert(c);
-		aa[c].push_back(it);
-	}
-
-	for (auto& x : se) {
-		if (aa[x].size() != 1)
-			sort(ALL(aa[x]));
-	}
+	string s1, s2;
+	cin >> s1 >> s2;
 
 	int count = 0;
 
-	auto it = aa[*(se.begin())].back();
+	if (s1.size() < s2.size()) {
+		cout << 0 << endl;
+		return 0;
+	}
 
-
-	if (it == n) {
-		if (aa[*(se.begin())].size() < 2) {
-			it = 0;
+	REP(i, s1.size() - s2.size()+1) {
+		bool f = false;
+		REP(j, s2.size()) {
+			if (s1[i + j] != s2[j]) {
+				f = true;
+			}
 		}
-		else {
-			it = *(aa[*(se.begin())].end() - 2);
+
+		if (!f) {
+			s1[i + s2.size()-1] = '#';
 		}
 	}
 
-	se.erase(se.begin());
-
-	for (auto x : se) {
-		auto s = upper_bound(ALL(aa[x]), it);
-
-		if (s != aa[x].begin()) {
+	for(auto x : s1) {
+		if (x == '#') {
 			count++;
-			s--;
 		}
-		else {
-			s = aa[x].end() - 1;
-		}
-
-		it = *s;
 	}
 
-	cout << count + 1 << endl;
+	cout << count << endl;
 }

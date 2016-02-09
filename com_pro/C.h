@@ -57,88 +57,46 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-vi a;
-vs ans;
 
-int k, n;
+int n, k;
 
-vi av;
-vs aw;
-
-bool ed = false;
-
-bool check()
-{
-	if (ed)
-		return false;
-
-	REP(i,av.size()){
-		auto x = av[i];
-		int num = 0;
-		while (x) {
-			num += a[(x % 10)-1];
-			x /= 10;
-		}
-		if (num != aw[i].size()) {
-			return false;
-		}
-	}
-
-	ed = true;
-
-	REP(i, aw.size()) {
-		auto x = aw[i];
-		reverse(ALL(x));
-
-		auto y = av[i];
-		
-		while (y) {
-			ans[(y % 10)-1] = x.substr(0, a[(y % 10)-1]);
-			reverse(ALL(ans[(y % 10) - 1]));
-			x.erase(x.begin(), x.begin() + a[(y % 10)-1]);
-			y /= 10;
-		}
-	}
-}
-
-void f(int i, int k)
-{
-	if (i == n) {
-		check();
-		return;
-	}
-	a[i] = k;
-	f(i + 1, 1);
-	f(i + 1, 2);
-	f(i + 1, 3);
-}
+int a[501][501];
 
 signed main()
 {
-	QUICK_CIN;	
-
+	QUICK_CIN;
 	debug_input;
+
 	cin >> n >> k;
+	--k;
 
-
-	a.resize(n);
-	ans.resize(n);
-
-	REP(i, k) {
-		int c;
-		string s;
-
-		cin >> c >> s;
-		av.push_back(c);
-		aw.push_back(s);
-
+	int aa = 1;
+	REP(i, n) {
+		REP(j, k) {
+			a[i][j] = aa++;
+		}
 	}
 
-	f(0, 1);
-	f(0, 2);
-	f(0, 3);
+	REP(i, n) {
+		REPS(k, j, n) {
+			a[i][j] = aa++;
+		}
+	}
 
-	for (auto x : ans) {
-		cout << x << endl;
+	int sum = 0;
+	REP(i, n) {
+		sum += a[i][k];
+	}
+
+	cout << sum << endl;
+
+	REP(i, n) {
+		REP(j, n) {
+			cout << a[i][j];
+			if (j != n - 1) {
+				cout << " ";
+			}
+		}
+		cout << endl;
 	}
 }

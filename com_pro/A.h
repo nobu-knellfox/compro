@@ -58,30 +58,32 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 
-int dp[101010][2]; // pos, less
-
 signed main()
 {
 	QUICK_CIN;
-	//debug_input;
+	debug_input;
 
-	string s;
+	int n, a, b, c;
 
-	cin >> s;
+	cin >> n >> a >> b >> c;
 
-	int n = s.length();
+	int count = 0;
+	int count2 = 0;
 
-	dp[0][0] = 1;
-	REP(i, n) REP(j, 2) {
-		int lim = j ? 9 : s[i] - '0';
-		REP(d, lim + 1) {
-			(dp[i + 1][j || d < lim] += dp[i][j]) %= mod;
-		}
+	count += n / a;
+
+	if (b <= n) {
+		n -= b;
+		count2 += n / (b - c);
+		n %= (b - c);
+		n += b;
+		count2++;
+		n -= (b - c);
+		count2 += n / a;
 	}
 
-	int ans = 0;
-	REP(j, 2) (ans += dp[n][j]) %= mod;
-	cout << ans << endl;
+	cout << max(count,count2) << endl;
 
-	return 0;
 }
+
+
