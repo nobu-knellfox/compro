@@ -45,15 +45,77 @@ using namespace std;
 template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
 using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
 template<class T>bool valid(T x, T w) { return 0 <= x&&x < w; }
-int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
+//int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
+
+int ext[13];
+bool draw;
+
+
+class WhiteHats {
+public:
+	int whiteNumber(vector <int> counts)
+	{
+		int s(114514), t(-1);
+
+		for (auto x : counts) {
+			t = max(t, x);
+			s = min(x, s);
+		}
+
+		if (s == t) {
+			if (s == counts.size() - 1) {
+				return s + 1;
+			}
+
+			if (s == 0) {
+				return 0;
+			}
+			return -1;
+		}
+
+		if (s+1 < t) {
+			return -1;
+		}
+
+		int count = 0;
+
+		for (auto x : counts) {
+			if (x == s) {
+				count++;
+			}
+		}
+
+		
+
+		if (t != count) {
+			return -1;
+		}
+
+		if (t > counts.size()) {
+			return -1;
+		}
+
+		return count;
+	}
+
+};
 
 signed main()
 {
 	QUICK_CIN;
 	debug_input;
 
+	ext[0] = 1;
+
+	REP(i, 12) {
+		ext[i + 1] = (i + 1)*ext[i];
+	}
+
+
+
+	return 0;
 }

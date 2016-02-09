@@ -20,3 +20,7 @@
 #ifdef SUB
 #include "Sub.h"
 #endif
+
+#ifdef TOPCODER
+#include "topcoder.h"
+#endif
