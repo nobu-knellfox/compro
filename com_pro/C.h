@@ -58,45 +58,30 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 
 
-int n, k;
-
-int a[501][501];
-
 signed main()
 {
 	QUICK_CIN;
-	debug_input;
+	//debug_input;
 
-	cin >> n >> k;
-	--k;
+	int n;
+	cin >> n;
 
-	int aa = 1;
-	REP(i, n) {
-		REP(j, k) {
-			a[i][j] = aa++;
+	bool win = false;
+
+	while (n) {
+		if (win) {
+			n = n/ 2 - 1;
+			win = !win;
+		}
+		else {
+			n /= 2;
+			win = !win;
 		}
 	}
-
-	REP(i, n) {
-		REPS(k, j, n) {
-			a[i][j] = aa++;
-		}
+	if (win) {
+		cout << "Takahashi" << endl;
 	}
-
-	int sum = 0;
-	REP(i, n) {
-		sum += a[i][k];
-	}
-
-	cout << sum << endl;
-
-	REP(i, n) {
-		REP(j, n) {
-			cout << a[i][j];
-			if (j != n - 1) {
-				cout << " ";
-			}
-		}
-		cout << endl;
+	else {
+		cout << "Aoki" << endl;
 	}
 }

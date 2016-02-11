@@ -57,56 +57,57 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-int table[70][70];
+const int N = 200000;
+vi prime;
+bool ptable[N];
 
+int counts[2000];
 
-class TallPeople {
+class PrimeStatistics {
 public:
-	vector <int> getPeople(vector <string> people)
+	int mostCommonRemainder(int lowerBound, int upperBound, int modulo)
 	{
+		ptable[0] = ptable[1] = true;
 
-
-		vs a = people;
-
-		int i = 0;
-		int h(0), w(0);
-
-		for (auto x : a) {
-			stringstream ss(x);
-			string temp;
-			int j = 0;
-			while (ss >> temp) {
-				table[i][j] = stoi(temp);
-				++j;
+		for (int i = 2; i*i < N; ++i) {
+			for (int j = i * 2; j < N; j += i) {
+				ptable[j] = true;
 			}
-			++i;
-			w = j;
-		}
-		h = i;
-
-
-		int maxmin = -inf;
-		REP(i, h) {
-			int maxi = inf;
-			REP(j, w) {
-				maxi = min(table[i][j], maxi);
-			}
-			maxmin = max(maxmin, maxi);
 		}
 
-		int minmax = inf;
-		REP(j, w) {
-			int mini = -inf;
-			REP(i, h) {
-				mini = max(table[i][j], mini);
+		REP(i, N) {
+			if (!ptable[i]) {
+				prime.push_back(i);
 			}
-			minmax = min(minmax, mini);
 		}
 
-		vi aa;
-		aa.push_back(maxmin);
-		aa.push_back(minmax);
+		int a, b, m;
 
-		return {maxmin,minmax};
+		a = lowerBound;
+		b = upperBound;
+		m = modulo;
+
+		auto low = lower_bound(ALL(prime), a);
+		auto high = upper_bound(ALL(prime), b);
+
+		high--;
+
+		while (low <= high) {
+			counts[(*low) % m]++;
+			++low;
+		}
+
+		int maxi = -inf;
+		int ii = -inf;
+
+		REP(i, 2000) {
+			if (maxi < counts[i]) {
+				maxi = max(counts[i], maxi);
+				ii = i;
+			}
+		}
+
+		return ii;
+
 	}
 };

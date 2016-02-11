@@ -62,76 +62,22 @@ signed main()
 	QUICK_CIN;
 	debug_input;
 
-	using com = complex<double>;
-
-	vector<com> points;
 
 	int n;
-	cin >> n;
-	REP(i,n) {
-		double x, y;
-		cin >> x >> y;
-		points.push_back({ x,y });
+	int k;
+	cin >> n >> k;
+
+	double as = 1;
+
+	double mas = (k - 1)*(n - k)*6 + ((k-1) + (n-k))*3 + 1;
+
+	double ad = 1;
+
+	REP(i, 3) {
+		ad *= n;
 	}
 
-	int numa = 0;
-	int numb = 0;
+	cout.precision(18);
+	cout << mas /ad << endl;
 
-	sort(ALL(points) ,[](com a, com b)
-	{
-		return a.real() < b.real();
-	});
-
-	REP(i, n) {
-		REPS(i + 1, j, n) {
-			bool rightup = points[i].imag() < points[j].imag();
-
-
-			double dx = points[j].real() - points[i].real();
-			double dy = points[j].imag() - points[i].imag();
-
-			//dx = dx*dx / len;
-			if(dy != 0)
-				dy = -dx/dy;
-
-			REPS(j + 1, k, n) {
-				auto _i = points[i];
-				auto _j = points[j];
-				auto _k = points[k];
-
-				if (_i.real() == _j.real() && (_i.imag() == _k.imag() || _j.imag() == _k.imag()))
-					continue;
-				if (_i.real() == _k.real() && (_i.imag() == _j.imag() || _k.imag() == _j.imag()))
-					continue;
-				if (_j.real() == _k.real() && (_j.imag() == _i.imag() || _k.imag() == _i.imag()))
-					continue;
-
-
-				auto tx = points[k].imag();
-
-				auto ry = (points[k].real() - points[j].real())*dy + points[j].imag();
-				auto ly = (points[k].real() - points[i].real())*dy + points[i].imag();
-
-				if (rightup) {
-					if (tx < ry && ly < tx) {
-						numa++;
-					}
-					else if (tx >ry || ly > tx) {
-						numb++;
-					}
-				}
-				else {
-					if (tx < ly && ry < tx) {
-						numa++;
-					}
-					else if (tx > ly || ry > tx) {
-						numb++;
-					}
-				}
-			}
-		}
-	}
-
-	cout << numa << endl;
-	cout << numb << endl;
 }

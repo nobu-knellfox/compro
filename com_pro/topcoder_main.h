@@ -1,59 +1,56 @@
 
 #include "topcoder.h"
 
-//int table[70][70];
+const int N = 200000;
+vi prime;
+bool ptable[N];
 
+int counts[2000];
 
 signed main()
 {
 	QUICK_CIN;
 	//debug_input;
 
-	vs a = { "9 2 3", "4 8 7" };
+	ptable[0] = ptable[1] = true;
 
-	int i = 0;
-	int h, w;
-
-	for (auto x : a) {
-		stringstream ss(x);
-		string temp;
-		int j = 0;
-		while (ss >> temp) {
-			table[i][j] = stoi(temp);
-			++j;
+	for (int i = 2; i*i < N;++i) {
+		for (int j = i*2; j < N; j += i) {
+			ptable[j] = true;
 		}
-		++i;
-		w = j;
 	}
-	h = i;
 
-	
-	int maxmin = -inf;
-	REP(i, h) {
-		int maxi = inf;
-		REP(j, w) {
-			maxi = min(table[i][j],maxi);
+	REP(i, N) {
+		if (!ptable[i]) {
+			prime.push_back(i);
 		}
-		maxmin = max(maxmin,maxi);
 	}
 
-	int minmax = inf;
-	REP(j, w) {
-		int mini = -inf;
-		REP(i, h) {
-			mini = max(table[i][j], mini);
+	int a,b,m;
+
+	cin >> a >> b >> m;
+
+	auto low = lower_bound(ALL(prime),a);
+	auto high = upper_bound(ALL(prime), b);
+
+	high--;
+
+	while (low <= high) {
+		counts[(*low)%m]++;
+		++low;
+	}
+
+	int maxi = -inf;
+	int ii = -inf;
+
+	REP(i, 2000) {
+		if (maxi < counts[i]) {
+			maxi = max(counts[i], maxi);
+			ii = i;
 		}
-		minmax = min(minmax, mini);
 	}
 
-	//return vector<int>({maxmin,minmax});
+	cout << ii << endl;
 
-	vi aa;
-	aa.push_back(maxmin);
-	aa.push_back(minmax);
-
-	for (auto x : aa) {
-		cout << x << endl;
-	}
 	return 0;
 }
