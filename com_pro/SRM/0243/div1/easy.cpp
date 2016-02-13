@@ -50,28 +50,29 @@ int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
+int pp;
 
-bool ed[1000];
-int p;
+set<int> zp;
 
 bool f(int k)
 {
-	REP(i, 1000) {
-		ed[i] = false;
-	}
-	ed[1] = true;
+	set<int> zzp;
 
 	int a = k;
+	zzp.insert(1);
 
-	REP(i, p - 2) {
-		k %= p;
-		if (!ed[k])
-			ed[k] = true;
-		else
-			return false;
-
+	REP(i, pp - 2) {
+		k %= pp;
+		zzp.insert(k);
 		k *= a;
 	}
+
+	for (auto x : zp) {
+		if (zzp.find(x) == zzp.end()) {
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -80,6 +81,13 @@ public:
 	vector <int> find(int p)
 	{
 		vi a;
+
+		pp = p;
+
+		REP(i, p - 1) {
+			zp.insert(i + 1);
+		}
+
 
 		REP(i, p - 1) {
 			if (f(i + 1)) {
