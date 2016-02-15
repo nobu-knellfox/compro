@@ -69,20 +69,23 @@ public:
 		m1 = stoi(string({ a[3],a[4] }));
 		m2 = stoi(string({ b[3],b[4] }));
 
-		int minh = min(h1, h2);
-		int maxh = max(h1, h2);
-
-
-
 		int count = 0;
-		count += min(maxh - minh, minh + 24 - maxh);
+		if (h1 <= h2) {
+			count += h2 - h1;
+		}
+		else {
+			count += h2 + 24 - h1;
+		}
 
-		m1 += count % 60;
+		m1 += count;
 
-		int minm = min(m1, m2);
-		int maxm = max(m1, m2);
-
-		count += min(maxm - minm, minm + 60 - maxm);
+		m1 %= 60;
+		if (m1 <= m2) {
+			count += m2 - m1;
+		}
+		else {
+			count += m2 + 60 - m1;
+		}
 
 		return count;
 
