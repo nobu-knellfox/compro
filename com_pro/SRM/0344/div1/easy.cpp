@@ -24,6 +24,7 @@
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
+#define REVERSE(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
 #if defined(_MSC_VER)||__cplusplus > 199711L
 #define AUTO(r,v) auto r = (v)
 #else
@@ -33,77 +34,93 @@ using namespace std;
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
 #define lint LL
-#define inf  ((int)1 << 54)
+#define inf  ((int)1 << 30)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
 #define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
+#define pl(a) cout << ""#a": " << a << endl;
+#ifdef _DEBUG
+#define debug_io fstream cin("input.txt");ofstream cout("output.txt");
+#else
+#define debug_io ;
+#endif
+#define debug_input debug_io
 #define pb(a) push_back(a)
 template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
 using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
 template<class T>bool valid(T x, T w) { return 0 <= x&&x < w; }
 int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
-//-----------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
 
 class VolleyballTournament {
 public:
-
 	string reconstructResults(int wonMatches, int lostMatches, int wonSets, int lostSets)
 	{
+		QUICK_CIN;
+		//	debug_input;
+
+		int win = wonMatches;
+		int lose = lostMatches;
+		int wins = wonSets;
+		int loses = lostSets;
 
 
-		int winm, losem, wins, loses;
-		winm = wonMatches;
-		losem = lostMatches;
-		wins = wonSets;
-		loses = lostSets;
+		int num = win + lose;
 
-		vs a;
+		vector<pii> a(num);
 
-		REP(i, winm) {
-			a.push_back("3-");
+		REPS(lose,i,num) {
+			a[i].first = 3;
+		}
+		REP(i,lose) {
+			a[i].second = 3;
 		}
 
-		wins -= 3 * winm;
+		wins -= 3 * win;
+		loses -= 3 * lose;
 
-		if (2 <= wins && wins <= 2 * (losem - 1)) {
-			return "AMBIGUITY";
+		bool f = false;
+
+		REVERSE(i, lose) {
+			int k = min(2, wins);
+
+			if (k == 2 || k < 0)
+				f = true;
+
+			if (k <= 0 && f) {
+				return "AMBIGUITY";
+			}
+			wins -= k;
+			a[i].first = k;
 		}
 
-		REP(i, losem) {
-			a.push_back(to_string(max(0, min(2, wins))) + "-");
-			wins -= 2;
+		f = false;
+
+		for(int i = num - 1 ; lose <= i ; --i) {
+			int k = min(2, loses);
+
+			if (k == 2 || k < 0)
+				f = true;
+
+			if (k <= 0 && f) {
+				return "AMBIGUITY";
+			}
+			loses -= k;
+			a[i].second = k;
 		}
-
-		std::reverse(ALL(a));
-
-
-		if (2 <= loses && loses <= 2 * (winm - 1)) {
-			return "AMBIGUITY";
-		}
-
-		REP(i, losem) {
-			a[i] += "3";
-		}
-
-		loses -= 3 * losem;
-
-		REP(i, winm) {
-			a[i + losem] += (to_string(max(0, min(2, loses))));
-			loses -= 2;
-		}
-
-		string s;
+		string ans;
 
 		for (auto x : a) {
-			s+=x;
-			s += ",";
+			ans += to_string(x.first) + "-" + to_string(x.second) + ",";
 		}
-		return s.substr(0,s.size()-1);
+
+		return ans.substr(0, ans.size() - 1);
+
 	}
 };
