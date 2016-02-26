@@ -24,6 +24,7 @@
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
+#define REVERSE(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
 #if defined(_MSC_VER)||__cplusplus > 199711L
 #define AUTO(r,v) auto r = (v)
 #else
@@ -33,70 +34,77 @@ using namespace std;
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
 #define LL long long
 #define lint LL
-#define inf  ((int)1 << 54)
+#define inf  ((int)1 << 30)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
 #define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
+#define pl(a) cout << ""#a": " << a << endl;
+#ifdef _DEBUG
+#define debug_io fstream cin("input.txt");ofstream cout("output.txt");
+#else
+#define debug_io ;
+#endif
+#define debug_input debug_io
 #define pb(a) push_back(a)
 template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
 using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
 template<class T>bool valid(T x, T w) { return 0 <= x&&x < w; }
 int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
-//-----------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 
 
 class ShipLoading {
 public:
+
 	int minimumTime(vector <int> cranes, vector <string> boxes)
 	{
-		sort(ALL(cranes));
 
-		vvi box;
+		vi a = cranes;
+		vs s = boxes;
 
-		for (auto x : boxes) {
-			vi a;
-			stringstream ss;
-			ss << x;
-			string tmp;
-			while (getline(ss, tmp, ' ')) {
-				a.push_back(stoi(tmp));
-			}
-			box.push_back(a);
+		using qi = vector<int>;
+
+		qi box;
+		string input;
+
+		for (auto x : s) {
+			input += x;
 		}
+		stringstream ss(input);
 
-		int count = 0;
-		bool f = false;
-		while (!box.empty()) {
-			vi temp = cranes;
-			EACH(it, box) {
-				f = false;
+		string temp;
+		while (ss >> temp) {
+			box.push_back(stoi(temp));
+		}
+		sort(ALL(box), greater<int>());
 
-				while (lower_bound(ALL(temp), *(it->begin())) != temp.end()) {
-					temp.erase(lower_bound(ALL(temp), *(it->begin())));
-					it->erase(it->begin());
+		sort(ALL(a));
 
-					if (it->empty()) {
-						it = box.erase(it);
-						f = true;
-						break;
+		vi num(a.size(), 0);
+
+		REP(i, box.size()) {
+			int mini = inf;
+			int it = -1;
+			REP(j, a.size()) {
+				if (box[i] <= a[j]) {
+					if (num[j] <= mini) {
+						mini = num[j];
+						it = j;
 					}
 				}
-				if (!f) {
-					++it;
-				}
 			}
-			count++;
-
-			if (temp.size() == cranes.size()) {
+			if (it == -1) {
 				return -1;
 			}
+			num[it]++;
 		}
-		return count + 1;
+
+		return *max_element(ALL(num));
 	}
 };
+
