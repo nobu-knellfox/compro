@@ -84,7 +84,7 @@ public:
 		a = x;
 		t = T;
 		sort(ALL(a));
-
+		n = a.size();
 		f(0);
 
 		return (double)(suc) / num ;
