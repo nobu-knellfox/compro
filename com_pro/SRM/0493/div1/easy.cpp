@@ -24,6 +24,7 @@
 using namespace std;
 #define REP(i,n) for(int (i) = 0;(i) < (n) ; ++(i))
 #define REPS(a,i,n) for(int (i) = (a) ; (i) < (n) ; ++(i))
+#define REVERSE(i,n) for(int (i) = n-1;(i) >= 0 ; --i)
 #if defined(_MSC_VER)||__cplusplus > 199711L
 #define AUTO(r,v) auto r = (v)
 #else
@@ -31,61 +32,97 @@ using namespace std;
 #endif
 #define ALL(c) (c).begin() , (c).end()
 #define EACH(it,c) for(AUTO(it,(c).begin());it != (c).end();)
+#define cx() real()
+#define cy() imag()
+#define px first
+#define py second
 #define LL long long
 #define lint LL
-#define inf  ((int)1 << 54)
+#define inf  ((int)1 << 30)
 #define mod 1000000007
 #define QUICK_CIN ios::sync_with_stdio(false); cin.tie(0);
 #define lowb lower_bound
 #define upb upper_bound
 #define ZERO(c,n) memset(&c[0],0,sizeof(int)*n)
 #define ZERO2(c,n) memset(&c[0][0],0,sizeof(int)*n)
-#define debug_input fstream cin("input.txt");ofstream cout("output.txt");
+#define pl(a) cout << ""#a": " << a << endl;
+#ifdef _DEBUG
+#define debug_io fstream cin("input.txt");ofstream cout("output.txt");
+#else
+#define debug_io ;
+#endif
+#define debug_input debug_io
 #define pb(a) push_back(a)
 template<class T>void scan(vector<T>& a, int n, istream& cin) { T c; REP(i, n) { cin >> c; a.push_back(c); } }
 using vs = vector<string>; using vi = vector<int>; using pii = pair<int, int>; using psi = pair<string, int>; using vvi = vector<vi>;
 template<class T>bool valid(T x, T w) { return 0 <= x&&x < w; }
 int dx[4] = { 1, -1, 0, 0 }; int dy[4] = { 0, 0, 1, -1 };
-//-----------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+
 
 class StonesGame {
-	bool miho[1000001];
 public:
+
+	int n, m, k, s;
+
+
+	bool stringer(int m)
+	{
+		int left = m - k;
+		left = abs(left) + 1;
+
+		int right = m + k;
+		if (n < right) {
+			right = n - (m - (n - k + 1));
+		}
+
+		if (left <= s && s <= right && abs(s - left) % 2 == 0) {
+			return false;
+		}
+
+		return true;
+	}
+
+
+
+
+
+	string romeo()
+	{
+		int left = m - k;
+		left = abs(left) + 1;
+
+		int right = m + k;
+		if (n < right) {
+			right = n - (m - (n - k + 1));
+		}
+		bool is_draw = false;
+
+		for (int i = left; i <= right; i += 2) {
+			if (i == s) {
+				return "Romeo";
+			}
+			is_draw |= stringer(i);
+		}
+
+		if (is_draw) {
+			return "Draw";
+		}
+		else {
+			return "Strangelet";
+		}
+	}
+
 	string winner(int N, int M, int K, int L)
 	{
-
-		int n, m, k, h;
 		n = N;
 		m = M;
 		k = K;
-		h = L;
+		s = L;
 
-
-		for (int i = max(1, h - (k - 1)); i <= min(n, h + (k - 1)); i += (2 - (k == 2))) {
-			miho[i] = true;
-		}
-
-
-		for (int i = max(1, m - (k - 1)); i <= min(n, m + (k - 1)); i += (2 - (k == 2))) {
-			if (i == h) {
-				return "Romeo";
-			}
-		}
-
-		bool f = true;
-
-		for (int i = max(1, m - (k - 1)); i <= min(n, m + (k - 1)); i += (2 - (k == 2))) {
-
-			f &= miho[i];
-
-		}
-		if (f) {
-			return "Strangelet";
-		}
-
-		return "Draw";
-
+		return romeo();
 	}
 };
