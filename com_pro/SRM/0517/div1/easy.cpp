@@ -64,9 +64,9 @@ class CompositeSmash {
 public:
 	bool f(int n, int target)
 	{
-	if (n < target || n % target != 0) {
-		return false;
-	}
+		if (n < target || n % target != 0) {
+			return false;
+		}
 
 		if (n == target) {
 			return true;
